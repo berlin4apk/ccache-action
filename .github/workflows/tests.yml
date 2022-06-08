@@ -12,7 +12,7 @@ on:
 
 defaults:
   run:
-    shell: bash -xv {0}
+    shell: "bash -xv {0}"
 
 env:
   CCACHE_ACTION_CI: true
@@ -53,6 +53,13 @@ jobs:
           key: parent
       - name: Test ccache 1/2
         run: |
+          set -vx
+          cleanup() {
+           [[ ${{ matrix.variant }} = ccache ]] || cat "${SCCACHE_ERROR_LOG}"
+          }
+          trap cleanup EXIT
+          
+         
           [[ ${{ steps.ccache.outputs.test-cache-hit }} = true ]] || [[ ${{ steps.ccache.outputs.test-cache-hit }} = false ]]
           if [ ${{ matrix.variant }} = sccache ]; then
             which sccache
