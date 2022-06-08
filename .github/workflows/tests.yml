@@ -55,12 +55,11 @@ jobs:
           key: parent
       - name: Test ccache 1/2
         run: |
-          #set -vx
           cleanup() {
+           touch "${SCCACHE_ERROR_LOG}"
            [[ ${{ matrix.variant }} = ccache ]] || cat "${SCCACHE_ERROR_LOG}"
           }
           trap cleanup EXIT
-          
          
           [[ ${{ steps.ccache.outputs.test-cache-hit }} = true ]] || [[ ${{ steps.ccache.outputs.test-cache-hit }} = false ]]
           if [ ${{ matrix.variant }} = sccache ]; then
