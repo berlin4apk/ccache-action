@@ -12,7 +12,7 @@ on:
 
 defaults:
   run:
-    shell: bash
+    shell: bash -xv
 
 env:
   CCACHE_ACTION_CI: true
