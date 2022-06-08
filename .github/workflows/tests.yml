@@ -19,7 +19,7 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash --noprofile --norc -o igncr -eo pipefail '{0}'
+    shell: /bin/bash --noprofile --norc -eo pipefail '{0}'
 env:
   CCACHE_ACTION_CI: true
   SCCACHE_ERROR_LOG: /tmp/sccache_log.txt
