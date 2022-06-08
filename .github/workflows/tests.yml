@@ -20,7 +20,8 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash --debug --verbose --noprofile --norc -e "'{0}'"
+    shell: /bin/bash --debug --verbose --noprofile --norc -e {0}
+    #shell: /bin/bash --debug --verbose --noprofile --norc -e "'{0}'"
 
 env:
   CCACHE_ACTION_CI: true
