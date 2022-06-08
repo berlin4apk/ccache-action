@@ -19,7 +19,8 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash --noprofile --norc -eo pipefail '{0}'
+    shell: /bin/bash --debug -vx --noprofile --norc -eo pipefail '{0}' 
+
 env:
   CCACHE_ACTION_CI: true
   SCCACHE_ERROR_LOG: /tmp/sccache_log.txt
@@ -76,7 +77,7 @@ jobs:
           echo "int x = $RANDOM;" > test.c
           ${{ matrix.variant }} gcc test.c -c -o test.o
           echo #################
-          cat /tmp/sccache_log.txt
+          cat /tmp/sccache_log.txt || true
       - name: Re-compile test program in Bash
         run: ${{ matrix.variant }} gcc test.c -c -o test.o
       - name: Re-compile test program in Bash
