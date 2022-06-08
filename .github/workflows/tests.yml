@@ -12,7 +12,7 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash --noprofile --norc -eo pipefail -Oxv '{0}'
+    shell: /bin/bash --noprofile --norc -xv -eo pipefail '{0}'
     # shell: /bin/bash --noprofile --norc -Ox -Ov -eo pipefail '{0}'
     # shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
 
