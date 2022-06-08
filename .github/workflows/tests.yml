@@ -10,6 +10,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# https://github.com/actions/runner/blob/main/docs/adrs/0277-run-action-shell-options.md
 # https://docs.github.com/en/actions/using-jobs/setting-default-values-for-jobs#setting-default-shell-and-working-directory
 # defaults:
 #   run:
@@ -19,7 +20,7 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash --debug --verbose --noprofile --norc -vx -e -o pipefail '{0}' 
+    shell: /bin/bash --debug --verbose --noprofile --norc -e '{0}' 
 
 env:
   CCACHE_ACTION_CI: true
