@@ -20,7 +20,7 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash --debug --verbose --noprofile --norc -e {0}
+    shell: /bin/bash --debug --verbose --noprofile --norc -x -v -e -- "'{0}'"
     #shell: /bin/bash --debug --verbose --noprofile --norc -e "'{0}'"
 
 env:
