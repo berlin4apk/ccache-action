@@ -10,13 +10,16 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# https://docs.github.com/en/actions/using-jobs/setting-default-values-for-jobs#setting-default-shell-and-working-directory
+# defaults:
+#   run:
+#     shell: bash
+#     working-directory: scripts
+
+
 defaults:
   run:
     shell: bash --noprofile --norc -e -o pipefail '{0}'
-    #shell: bash --debug --noprofile --norc -xv -e '{0}'
-    # shell: /bin/bash --noprofile --norc -Ox -Ov -eo pipefail '{0}'
-    # shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
-
 env:
   CCACHE_ACTION_CI: true
   SCCACHE_ERROR_LOG: /tmp/sccache_log.txt
@@ -56,12 +59,6 @@ jobs:
           key: parent
       - name: Test ccache 1/2
         run: |
-          cleanup() {
-           touch "${SCCACHE_ERROR_LOG}"
-           [[ ${{ matrix.variant }} = ccache ]] || cat "${SCCACHE_ERROR_LOG}"
-          }
-          trap cleanup EXIT
-         
           [[ ${{ steps.ccache.outputs.test-cache-hit }} = true ]] || [[ ${{ steps.ccache.outputs.test-cache-hit }} = false ]]
           if [ ${{ matrix.variant }} = sccache ]; then
             which sccache
