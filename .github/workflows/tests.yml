@@ -54,6 +54,7 @@ jobs:
         run: |
           [[ ${{ steps.ccache.outputs.test-cache-hit }} = true ]] || [[ ${{ steps.ccache.outputs.test-cache-hit }} = false ]]
           if [ ${{ matrix.variant }} = sccache ]; then
+            export SCCACHE_ERROR_LOG=/tmp/sccache_log.txt ; export SCCACHE_LOG=debug
             which sccache
             sccache -V
             sccache -s
@@ -68,6 +69,8 @@ jobs:
           # Example program
           echo "int x = $RANDOM;" > test.c
           ${{ matrix.variant }} gcc test.c -c -o test.o
+          echo #################
+          cat /tmp/sccache_log.txt
       - name: Re-compile test program in Bash
         run: ${{ matrix.variant }} gcc test.c -c -o test.o
       - name: Re-compile test program in Bash
