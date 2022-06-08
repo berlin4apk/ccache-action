@@ -12,7 +12,7 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash -o xtrace -o verbose --noprofile --norc -eo pipefail '{0}'
+    shell: /bin/bash -O x -O v --noprofile --norc -eo pipefail '{0}'
     # shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
 
 env:
