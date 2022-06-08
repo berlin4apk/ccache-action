@@ -12,7 +12,8 @@ on:
 
 defaults:
   run:
-    shell: "bash -xv {0}"
+    shell: /bin/bash -o xtrace -o verbose --noprofile --norc -o igncr -eo pipefail '{0}'
+    # shell: C:\cygwin\bin\bash.exe --noprofile --norc -o igncr -eo pipefail '{0}'
 
 env:
   CCACHE_ACTION_CI: true
