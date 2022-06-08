@@ -20,7 +20,7 @@ on:
 
 defaults:
   run:
-    shell: '/bin/bash --noprofile --norc -x -v -e -o pipefail {0}'
+    shell: 'bash --noprofile --norc -x -v -e -o pipefail {0}'
 
 env:
   CCACHE_ACTION_CI: true
