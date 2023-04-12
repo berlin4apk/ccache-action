@@ -1,4 +1,4 @@
-name: PR build
+name: npm-audit
 on:
   pull_request:
   workflow_dispatch:
