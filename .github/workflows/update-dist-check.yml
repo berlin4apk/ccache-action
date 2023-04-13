@@ -1,6 +1,6 @@
 # see https://github.com/cardinalby/git-get-release-action/blob/master/.github/workflows/build-pack.yml
 
-name: "update-dist-check"
+name: "update-dist-check-yml"
 on:
   push:
     branches:
