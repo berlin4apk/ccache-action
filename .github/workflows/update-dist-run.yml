@@ -17,7 +17,7 @@ on:  # yamllint disable-line rule:truthy
         type: string
   
 jobs:
-  update-dist-DOIT-buildPack:
+  update-dist-run-buildPack:
     env:
       #PACKED_JS_PATH: 'dist/index.js'
       PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
