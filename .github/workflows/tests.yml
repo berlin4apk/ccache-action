@@ -47,11 +47,42 @@ jobs:
             dist
             !dist/**/*.md
           # retention-days: 5
+#      - name: git diff
+#        if: ${{ github.actor != 'dependabot[bot]' }}
+#        run: |
+#          git diff --exit-code
+
+  build-git-diff:
+    # Run npm build and check that the dist/ folder is up to date.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - name: npm ci
+        run: |
+          npm ci
+      - name: npm run build
+        run: |
+          npm run build
+      - name: npm run test
+        run: |
+          npm run test --if-present
+# https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+      - name: Archive dist production artifacts / dist-without-markdown-build-git-diff
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown-build-git-diff
+          path: |
+            dist
+            !dist/**/*.md
+          # retention-days: 5
       - name: git diff
         if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
           git diff --exit-code
-          
 
   build-npm-install:
     # Run npm build and check that the dist/ folder is up to date.
