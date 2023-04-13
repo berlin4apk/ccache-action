@@ -40,8 +40,8 @@ jobs:
 #      contents: read
 #      pull-requests: write
 
-  call-workflow-passing-data:
-    uses: ./.github/workflows/update-dist-check2-doit.yml@main
+  call-update-dist-check2-DOIT:
+    uses: ./.github/workflows/update-dist-check2-doit.yml
     with:
       PACKED_JS_PATH: ${{ env.PACKED_JS_PATH }}
       packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
