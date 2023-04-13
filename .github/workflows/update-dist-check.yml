@@ -24,7 +24,7 @@ jobs:
       - name: Extract PACKED_JS_PATH
         id: packedJsPath
         shell: bash
-        run: echo "jspath=$(echo ${{ env.PACKED_JS_PATH }}" >> $GITHUB_OUTPUT
+        run: echo "jspath=$(echo ${ env.PACKED_JS_PATH })" >> $GITHUB_OUTPUT
       - name: Extract branch name
         id: extractBranch
         shell: bash
