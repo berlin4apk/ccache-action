@@ -1,0 +1,54 @@
+---
+# # https://docs.github.com/en/actions/using-workflows/reusing-workflows
+# see https://github.com/cardinalby/git-get-release-action/blob/master/.github/workflows/build-pack.yml
+
+name: "update-dist-DOIT"
+on:  # yamllint disable-line rule:truthy
+##  push:
+##    branches:
+##      - '*'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
+jobs:
+  update-dist-DOIT-buildPack:
+    env:
+      #PACKED_JS_PATH: 'dist/index.js'
+      PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
+      #PACKED_JS_PATH: 'dist/restore/index.js'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract branch name
+        id: extractBranch
+        shell: bash
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build --if-present
+      - name: Package
+        run: npm run package --if-present
+      - name: Check packed js changes
+        id: packedJsStatus
+        run: echo "changes=$(git status ${{ env.PACKED_JS_PATH }} --porcelain | tr -d [:cntrl:])" >> $GITHUB_OUTPUT
+      - name: Commit packed js
+        id: commitPackedJs
+        if: steps.packedJsStatus.outputs.changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ${{ env.PACKED_JS_PATH }}
+          git commit -m "Pack with dependencies to ${{ steps.packedJsStatus.outputs.changes }}"
+      - name: Push packed js
+        if: steps.commitPackedJs.outcome == 'success'
+        uses: ad-m/github-push-action@0fafdd62b84042d49ec0cb92d9cac7f7ce4ec79e
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          #tags: true
+          #force: true
+          branch: ${{ steps.extractBranch.outputs.branch }}
