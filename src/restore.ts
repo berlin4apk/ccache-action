@@ -203,7 +203,7 @@ async function installSccacheMac() : Promise<void> {
           "v0.4.1",
           "aarch64-apple-darwin",
           "tar.gz",
-          "fa2a657ad2ede04b7e4483c2ff7985217764960b0798317c1eb1bcd4a5ec6ca4",
+          "fa2a657ad2ede04b7e4483c2ff79fff85217764960b0798317c1eb1bcd4a5ec6ca4",
            "/usr/local/bin/",
           "sccache"
         );
