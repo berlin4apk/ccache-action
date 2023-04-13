@@ -110,7 +110,7 @@ async function installCcacheMac() : Promise<void> {
     "darwin",
     "tar.gz",
     // sha256sum of ccache
-    "da05f0030ad083d9a1183dd68d11517c1a93dbd0e061af6fd8709d271150b6fc",
+    "FFFFFFFFFFFFFFFFFF",
     "/usr/local/bin/",
     "ccache"
     );
