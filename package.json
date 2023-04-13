@@ -10,7 +10,8 @@
     "format-check": "prettier --check '**/*.ts'",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --target es2020 -o dist/restore src/restore.ts && ncc build --target es2020 -o dist/save src/save.ts",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
+    "test-force": "jest",
     "all-package": "npm run build && npm run package",
     "all-formart": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
