@@ -2,7 +2,7 @@
 # # https://docs.github.com/en/actions/using-workflows/reusing-workflows
 # see https://github.com/cardinalby/git-get-release-action/blob/master/.github/workflows/build-pack.yml
 
-name: "update-dist-DOIT"
+name: "update-dist-run-DOIT"
 on:  # yamllint disable-line rule:truthy
 ##  push:
 ##    branches:
@@ -17,7 +17,7 @@ on:  # yamllint disable-line rule:truthy
         type: string
   
 jobs:
-  update-dist-DOIT-buildPack:
+  update-dist-run-DOIT-buildPack:
     env:
       #PACKED_JS_PATH: 'dist/index.js'
       PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
