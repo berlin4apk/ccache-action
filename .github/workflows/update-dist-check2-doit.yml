@@ -19,7 +19,7 @@ on:  # yamllint disable-line rule:truthy
         required: true
         type: string
     secrets:
-      github_token:
+      token:
         required: true
 
 # on:
