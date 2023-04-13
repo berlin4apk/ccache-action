@@ -5,6 +5,6 @@ on:
 
 jobs:
   pass-secrets-to-workflow:
-    uses: ./.github/workflows/called-workflow.yml
+    uses: ./.github/workflows/reusable-workflow-B.yml
     secrets: inherit
 
