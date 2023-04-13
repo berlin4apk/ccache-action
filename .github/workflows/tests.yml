@@ -39,12 +39,15 @@ jobs:
         run: |
           npm run test --if-present
 # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+      - name: 'Tar dist/ files'
+        run: tar -cvf my_dist_files.tar dist
       - name: Archive dist production artifacts / dist-without-markdown-build
         uses: actions/upload-artifact@v3
         with:
           name: dist-without-markdown
           path: |
-            dist
+            my_dist_files.tar
+            #dist
             !dist/**/*.md
           # retention-days: 5
 #      - name: git diff
@@ -158,6 +161,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist-without-markdown
+      - name: 'un-Tar dist/ files'
+        run: tar -xvf my_dist_files.tar
       - name: Run ccache-action
         id: ccache
         uses: ./
@@ -260,6 +265,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist-without-markdown
+      - name: 'un-Tar dist/ files'
+        run: tar -xvf my_dist_files.tar
       - name: Run ccache action
         uses: ./
         id: output
@@ -299,6 +306,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist-without-markdown
+      - name: 'un-Tar dist/ files'
+        run: tar -xvf my_dist_files.tar
       - name: Run ccache action
         uses: ./
         id: restore-keys
@@ -325,6 +334,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist-without-markdown
+      - name: 'un-Tar dist/ files'
+        run: tar -xvf my_dist_files.tar
       - run: apt update
         shell: bash
       - name: Run ccache-action
@@ -345,6 +356,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist-without-markdown
+      - name: 'un-Tar dist/ files'
+        run: tar -xvf my_dist_files.tar
       - name: Run ccache-action
         uses: ./
         with:
@@ -365,6 +378,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist-without-markdown
+      - name: 'un-Tar dist/ files'
+        run: tar -xvf my_dist_files.tar
       - name: Run ccache-action
         uses: ./
         with:
