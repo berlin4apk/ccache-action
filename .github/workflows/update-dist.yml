@@ -9,7 +9,8 @@ jobs:
   buildPack:
     env:
       #PACKED_JS_PATH: 'dist/index.js'
-      PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
+      #PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
+      PACKED_JS_PATH: 'dist/restore/index.js'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
