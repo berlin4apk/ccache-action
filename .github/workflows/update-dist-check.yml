@@ -41,7 +41,10 @@ jobs:
         run: npm run package --if-present
       - name: Check packed js changes
         id: packedJsStatus
-        run: echo "changes=$(git status ${{ steps.packedJSpath.outputs.JSpath }} --porcelain | tr -d [:cntrl:])" >> $GITHUB_OUTPUT
+        run: |
+          changes=$(git status dist/restore/index.js dist/save/index.js --porcelain | tr -d [:cntrl:] ; ); [[ "x" = "x$changes" ]] && changes="false" ;
+          echo "changes=$changes" >> $GITHUB_OUTPUT
+          #echo "changes=$(git status dist/restore/index.js dist/save/index.js --porcelain | tr -d [:cntrl:] | grep -E "$" || echo false)" >> $GITHUB_OUTPUT
 
 #  if: steps.packedJsStatus.outputs.changes
 #    permissions:
