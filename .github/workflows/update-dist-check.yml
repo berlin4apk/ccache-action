@@ -45,6 +45,7 @@ jobs:
 #      pull-requests: write
 
   call-update-dist-check2-DOIT:
+    needs: [update-dist-check]
     uses: ./.github/workflows/update-dist-check2-doit.yml
     with:
       packedJsPath_jspath: ${{ steps.packedJsPath.outputs.jspath }}
