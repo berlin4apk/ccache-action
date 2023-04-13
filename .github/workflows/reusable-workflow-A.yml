@@ -6,5 +6,7 @@ on:
 jobs:
   pass-secrets-to-workflow:
     uses: ./.github/workflows/reusable-workflow-B.yml
+    with:
+      config-path: foo/.github/labeler.yml
     secrets: inherit
 
