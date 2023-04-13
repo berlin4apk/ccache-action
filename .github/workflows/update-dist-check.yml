@@ -61,9 +61,9 @@ jobs:
   call-update-dist-check2-DOIT:
     uses: ./.github/workflows/update-dist-check2-doit.yml
     with:
-      packedJsPath_jspath: ${{ needs.job1.outputs.update-dist-check.outputs.packedJsPath_jspath }}
-      packedJsStatus_changes: ${{ jobs.update-dist-check.steps.packedJsStatus.outputs.packedJsStatus_changes }}
-      extractBranch_branch: ${{ jobs.update-dist-check.steps.extractBranch.outputs.extractBranch_branch }}
+      packedJsPath_jspath: ${{ needs.update-dist-check.outputs.packedJsPath_jspath }}
+      packedJsStatus_changes: ${{ needs.update-dist-check.outputs.packedJsStatus_changes }}
+      extractBranch_branch: ${{ needs.update-dist-check.outputs.extractBranch_branch }}
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
 #${{needs.job1.outputs.output1}}
