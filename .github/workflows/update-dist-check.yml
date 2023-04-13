@@ -17,6 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Extract PACKED_JS_PATH
+        id: packedJsPath
+        shell: bash
+        run: echo "JSpath=$(echo ${{ env.PACKED_JS_PATH }}" >> $GITHUB_OUTPUT
       - name: Extract branch name
         id: extractBranch
         shell: bash
@@ -33,7 +37,7 @@ jobs:
         run: npm run package --if-present
       - name: Check packed js changes
         id: packedJsStatus
-        run: echo "changes=$(git status ${{ env.PACKED_JS_PATH }} --porcelain | tr -d [:cntrl:])" >> $GITHUB_OUTPUT
+        run: echo "changes=$(git status ${{ steps.packedJSpath.outputs.JSpath }} --porcelain | tr -d [:cntrl:])" >> $GITHUB_OUTPUT
 
 #  if: steps.packedJsStatus.outputs.changes
 #    permissions:
@@ -43,7 +47,7 @@ jobs:
   call-update-dist-check2-DOIT:
     uses: ./.github/workflows/update-dist-check2-doit.yml
     with:
-      PACKED_JS_PATH: ${{ env.PACKED_JS_PATH }}
+      packedJsPath_JSpath: ${{ steps.packedJsPath.outputs.JSpath }}
       packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
       extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
     secrets:
