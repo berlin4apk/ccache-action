@@ -59165,7 +59165,7 @@ async function installCcacheMac() {
     if (variantInstallFromGithub) {
         await installCcacheFromGitHub("4.8", "darwin", "tar.gz", 
         // sha256sum of ccache
-        "FFFFFFFFFFFFFffFFFFF", "/usr/local/bin/", "ccache");
+        "FFFFFFFFFFFFFfffffFFFFF", "/usr/local/bin/", "ccache");
     }
     else {
         await execBash("brew install ccache");
