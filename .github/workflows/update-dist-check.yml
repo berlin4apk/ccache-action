@@ -20,7 +20,7 @@ jobs:
       - name: Extract PACKED_JS_PATH
         id: packedJsPath
         shell: bash
-        run: echo "JSpath=$(echo ${{ env.PACKED_JS_PATH }}" >> $GITHUB_OUTPUT
+        run: echo "jspath=$(echo ${{ env.PACKED_JS_PATH }}" >> $GITHUB_OUTPUT
       - name: Extract branch name
         id: extractBranch
         shell: bash
@@ -47,7 +47,7 @@ jobs:
   call-update-dist-check2-DOIT:
     uses: ./.github/workflows/update-dist-check2-doit.yml
     with:
-      packedJsPath_JSpath: ${{ steps.packedJsPath.outputs.JSpath }}
+      packedJsPath_jspath: ${{ steps.packedJsPath.outputs.jspath }}
       packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
       extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
     secrets:
