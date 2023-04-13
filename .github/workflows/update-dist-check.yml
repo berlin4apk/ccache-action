@@ -1,0 +1,69 @@
+# see https://github.com/cardinalby/git-get-release-action/blob/master/.github/workflows/build-pack.yml
+
+name: "update-dist-check"
+on:
+  push:
+    branches:
+      - '*'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
+jobs:
+  update-dist-check:
+    outputs:
+      packedJsPath_jspath: ${{ steps.packedJsPath.outputs.JSpath }}
+      extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
+      packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
+    env:
+      #PACKED_JS_PATH: 'dist/index.js'
+      PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
+      #PACKED_JS_PATH: 'dist/restore/index.js'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract PACKED_JS_PATH
+        id: packedJsPath
+        shell: bash
+        run: echo "jspath=$(echo ${ env.PACKED_JS_PATH })" >> $GITHUB_OUTPUT
+      - name: Extract branch name
+        id: extractBranch
+        shell: bash
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build --if-present
+      - name: Package
+        run: npm run package --if-present
+      - name: Check packed js changes
+        id: packedJsStatus
+        run: echo "changes=$(git status ${{ steps.packedJSpath.outputs.JSpath }} --porcelain | tr -d [:cntrl:])" >> $GITHUB_OUTPUT
+
+#  if: steps.packedJsStatus.outputs.changes
+#    permissions:
+#      contents: read
+#      pull-requests: write
+
+#jobs:
+#  call-another-reusable:
+#    uses: octo-org/example-repo/.github/workflows/another-reusable.yml@v1
+
+#jobs:
+#  call-another-reusable:
+#    uses: octo-org/example-repo/.github/workflows/another-reusable.yml@v1
+#    runs-on: ubuntu-latest
+#    needs: update-dist-check
+# - run: echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}
+  call-update-dist-check2-DOIT:
+    uses: ./.github/workflows/update-dist-check2-doit.yml
+    with:
+      packedJsPath_jspath: ${{ needs.update-dist-check.outputs.packedJsPath_jspath }}
+      packedJsStatus_changes: ${{ needs.update-dist-check.outputs.packedJsStatus_changes }}
+      extractBranch_branch: ${{ needs.update-dist-check.outputs.extractBranch_branch }}
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+#${{needs.job1.outputs.output1}}
