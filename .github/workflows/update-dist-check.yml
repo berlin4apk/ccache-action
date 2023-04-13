@@ -41,10 +41,10 @@ jobs:
 #    permissions:
 #      contents: read
 #      pull-requests: write
-  uses: ./.github/workflows/update-dist-check2-doit.yml@main
-    with:
-      PACKED_JS_PATH: ${{ env.PACKED_JS_PATH }}
-      packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
-      extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
+    uses: ./.github/workflows/update-dist-check2-doit.yml@main
+      with:
+        PACKED_JS_PATH: ${{ env.PACKED_JS_PATH }}
+        packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
+        extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
