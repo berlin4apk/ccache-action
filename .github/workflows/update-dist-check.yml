@@ -1,6 +1,6 @@
 # see https://github.com/cardinalby/git-get-release-action/blob/master/.github/workflows/build-pack.yml
 
-name: "update-dist"
+name: "update-dist-check"
 on:
   push:
     branches:
@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  buildPack:
+  update-dist-check:
     env:
       #PACKED_JS_PATH: 'dist/index.js'
       PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
@@ -34,19 +34,17 @@ jobs:
       - name: Check packed js changes
         id: packedJsStatus
         run: echo "changes=$(git status ${{ env.PACKED_JS_PATH }} --porcelain | tr -d [:cntrl:])" >> $GITHUB_OUTPUT
-      - name: Commit packed js
-        id: commitPackedJs
-        if: steps.packedJsStatus.outputs.changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add ${{ env.PACKED_JS_PATH }}
-          git commit -m "Pack with dependencies to ${{ steps.packedJsStatus.outputs.changes }}"
-      - name: Push packed js
-        if: steps.commitPackedJs.outcome == 'success'
-        uses: ad-m/github-push-action@0fafdd62b84042d49ec0cb92d9cac7f7ce4ec79e
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          #tags: true
-          #force: true
-          branch: ${{ steps.extractBranch.outputs.branch }}
+
+
+  call-workflow-passing-data:
+  if: steps.packedJsStatus.outputs.changes
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: uses: ./.github/workflows/update-dist-check2-doit.yml@main
+    with:
+      PACKED_JS_PATH: ${{ env.PACKED_JS_PATH }}
+      packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
+      extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
