@@ -6,7 +6,7 @@ name: "update-dist-check2-DOIT"
 on:
   workflow_call:
     inputs:
-      PACKED_JS_PATH:
+      packedJsPath_JSpath:
         required: true
         type: string
       packedJsStatus_changes:
@@ -33,6 +33,7 @@ jobs:
 #      PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
 #      #PACKED_JS_PATH: 'dist/restore/index.js'
     runs-on: ubuntu-latest
+    if: inputs.packedJsStatus_changes
     steps:
 
       - name: Commit packed js
