@@ -12,6 +12,7 @@ on:
     branches:
       - main
       - ci-testing
+      - testfoo
     paths-ignore:
       - '**.md'
   pull_request:
