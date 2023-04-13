@@ -1,3 +1,5 @@
+name: Reusable workflow example A
+
 on:
   workflow_dispatch:
 
