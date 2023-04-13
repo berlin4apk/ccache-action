@@ -8,7 +8,8 @@ on:
         type: string
     secrets:
       token:
-        required: true
+        required: false
+        #required: true
 
 jobs:
   triage:
@@ -16,8 +17,9 @@ jobs:
     steps:
     - name: Use a repo or org secret from the calling workflow.
       run: |
-        echo ${{ secrets.token }}
-        echo ${{ inputs.config-path }}
+        echo secrets.token ${{ secrets.token }}
+        echo inputs.config-path ${{ inputs.config-path }}
+        echo secrets.CALLING_WORKFLOW_SECRET ${{ secrets.CALLING_WORKFLOW_SECRET }}
 #    - uses: actions/labeler@v4
 #      with:
 #        repo-token: ${{ secrets.token }}
