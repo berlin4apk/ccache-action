@@ -67,4 +67,6 @@ jobs:
         if: |
           github.event_name != 'workflow_dispatch'
           && steps.packedJsStatus.outputs.changes
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: gh workflow run -f branches=${{ steps.extractBranch.outputs.branch }} update-dist-run-DOIT
