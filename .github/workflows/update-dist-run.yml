@@ -57,7 +57,7 @@ jobs:
         id: packedJsStatus
         run: echo "changes=$(git status ${{ env.PACKED_JS_PATH }} --porcelain | tr -d [:cntrl:])" >> $GITHUB_OUTPUT
       - name: CALL update-dist-run-DOIT workflow_dispatch with branch ${{inputs.branch}}
-        id: commitPackedJs
+        id: commitPackedJs_workflow_dispatch
         if: |
           github.event_name == 'workflow_dispatch'
           && steps.packedJsStatus.outputs.changes
