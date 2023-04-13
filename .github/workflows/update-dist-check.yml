@@ -10,6 +10,10 @@ on:
   
 jobs:
   update-dist-check:
+    outputs:
+      packedJsPath_jspath: ${{ steps.packedJsPath.outputs.JSpath }}
+      extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
+      packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
     env:
       #PACKED_JS_PATH: 'dist/index.js'
       PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
@@ -44,12 +48,22 @@ jobs:
 #      contents: read
 #      pull-requests: write
 
+#jobs:
+#  call-another-reusable:
+#    uses: octo-org/example-repo/.github/workflows/another-reusable.yml@v1
+
+#jobs:
+#  call-another-reusable:
+#    uses: octo-org/example-repo/.github/workflows/another-reusable.yml@v1
+#    runs-on: ubuntu-latest
+#    needs: update-dist-check
+# - run: echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}
   call-update-dist-check2-DOIT:
-    needs: [update-dist-check]
     uses: ./.github/workflows/update-dist-check2-doit.yml
     with:
-      packedJsPath_jspath: ${{ steps.packedJsPath.outputs.jspath }}
-      packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
-      extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
+      packedJsPath_jspath: ${{ needs.job1.outputs.update-dist-check.outputs.packedJsPath_jspath }}
+      packedJsStatus_changes: ${{ jobs.update-dist-check.steps.packedJsStatus.outputs.packedJsStatus_changes }}
+      extractBranch_branch: ${{ jobs.update-dist-check.steps.extractBranch.outputs.extractBranch_branch }}
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
+#${{needs.job1.outputs.output1}}
