@@ -4,6 +4,12 @@ name: "update-dist-check2-DOIT"
 # https://docs.github.com/en/actions/using-workflows/reusing-workflows
 
 on:  # yamllint disable-line rule:truthy
+##  push:
+##    branches:
+##      - '*'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
   workflow_call:
     inputs:
       packedjspathjspath:
