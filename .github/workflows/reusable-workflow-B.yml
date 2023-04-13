@@ -1,0 +1,36 @@
+name: Reusable workflow example
+
+on:
+  workflow_call:
+    inputs:
+      config-path:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Use a repo or org secret from the calling workflow.
+      run: |
+        echo ${{ secrets.token }}
+        echo ${{ inputs.config-path }}
+#    - uses: actions/labeler@v4
+#      with:
+#        repo-token: ${{ secrets.token }}
+#        configuration-path: ${{ inputs.config-path }}
+
+
+#on:
+#  workflow_call:
+
+#jobs:
+#  pass-secret-to-action:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Use a repo or org secret from the calling workflow.
+#        run: echo ${{ secrets.CALLING_WORKFLOW_SECRET }}
+
