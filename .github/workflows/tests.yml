@@ -48,7 +48,7 @@ jobs:
           path: |
             my_dist_files.tar
             #dist
-            !dist/**/*.md
+            #!dist/**/*.md
           # retention-days: 5
 #      - name: git diff
 #        if: ${{ github.actor != 'dependabot[bot]' }}
@@ -57,6 +57,7 @@ jobs:
 
   build-git-diff:
     # Run npm build and check that the dist/ folder is up to date.
+    if: ${{ github.actor == 'DISABELD-NULLdependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -90,7 +91,8 @@ jobs:
   build-npm-install:
     # Run npm build and check that the dist/ folder is up to date.
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    #if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor == 'DISABELD-NULLdependabot[bot]' }}
     steps:
       - uses: actions/checkout@v3
       - name: Build npm install
