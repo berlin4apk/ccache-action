@@ -61,10 +61,14 @@ jobs:
         if: |
           github.event_name == 'workflow_dispatch'
           && steps.packedJsStatus.outputs.changes
-        run: gh workflow run -f branches=${{inputs.branch}} update-dist-run-DOIT
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run -f branch=${{inputs.branch}} update-dist-run-DOIT
       - name: CALL update-dist-run-DOIT
         id: commitPackedJs
         if: |
           github.event_name != 'workflow_dispatch'
           && steps.packedJsStatus.outputs.changes
-        run: gh workflow run -f branches=${{ steps.extractBranch.outputs.branch }} update-dist-run-DOIT
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run -f branch=${{ steps.extractBranch.outputs.branch }} update-dist-run-DOIT
