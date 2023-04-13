@@ -9,6 +9,12 @@ on:  # yamllint disable-line rule:truthy
 ##      - '*'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to work on'
+        required: true
+        default: 'main'
+        type: string
   
 jobs:
   update-dist-DOIT-buildPack:
@@ -18,8 +24,21 @@ jobs:
       #PACKED_JS_PATH: 'dist/restore/index.js'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: actions/checkout workflow_dispatch with branch ${{inputs.branch}}
+        uses: actions/checkout@v3
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          ref: ${{inputs.branch}}
+      - name: actions/checkout 
+        uses: actions/checkout@v3
+        if: github.event_name != 'workflow_dispatch'
+      - name: Extract branch name workflow_dispatch with branch ${{inputs.branch}}
+        if: github.event_name == 'workflow_dispatch'
+        id: extractBranch_workflow_dispatch
+        shell: bash
+        run: echo "branch=$(echo ${{inputs.branch}})" >> $GITHUB_OUTPUT
       - name: Extract branch name
+        if: github.event_name != 'workflow_dispatch'
         id: extractBranch
         shell: bash
         run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
@@ -44,8 +63,20 @@ jobs:
           git config --local user.name "GitHub Action"
           git add ${{ env.PACKED_JS_PATH }}
           git commit -m "Pack with dependencies to ${{ steps.packedJsStatus.outputs.changes }}"
+      - name: Push packed js workflow_dispatch with branch ${{inputs.branch}}
+        if: |
+          github.event_name == 'workflow_dispatch'
+          && steps.commitPackedJs.outcome == 'success'
+        uses: ad-m/github-push-action@0fafdd62b84042d49ec0cb92d9cac7f7ce4ec79e
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          #tags: true
+          #force: true
+          branch: ${{ steps.extractBranch_workflow_dispatch.outputs.branch }}
       - name: Push packed js
-        if: steps.commitPackedJs.outcome == 'success'
+        if: |
+          github.event_name != 'workflow_dispatch'
+          && steps.commitPackedJs.outcome == 'success'
         uses: ad-m/github-push-action@0fafdd62b84042d49ec0cb92d9cac7f7ce4ec79e
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
