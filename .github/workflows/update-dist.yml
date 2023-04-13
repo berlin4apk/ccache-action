@@ -24,9 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build
-        run: npm run build
+        run: npm run build --if-present
       - name: Package
-        run: npm run package
+        run: npm run package --if-present
       - name: Check packed js changes
         id: packedJsStatus
         run: echo ::set-output name=changes::$(git status ${{ env.PACKED_JS_PATH }} --porcelain)
