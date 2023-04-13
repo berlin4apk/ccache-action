@@ -117,5 +117,5 @@ jobs:
       extractbranchbranch: ${{needs.job0.outputs.extractbranch}}
       testfoo: fooo
     secrets:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.GITHUB_TOKEN }}
 #${{needs.job1.outputs.output1}}
