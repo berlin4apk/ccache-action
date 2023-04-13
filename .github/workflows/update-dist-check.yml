@@ -35,16 +35,16 @@ jobs:
         id: packedJsStatus
         run: echo "changes=$(git status ${{ env.PACKED_JS_PATH }} --porcelain | tr -d [:cntrl:])" >> $GITHUB_OUTPUT
 
-
-  call-workflow-passing-data:
 #  if: steps.packedJsStatus.outputs.changes
 #    permissions:
 #      contents: read
 #      pull-requests: write
+
+  call-workflow-passing-data:
     uses: ./.github/workflows/update-dist-check2-doit.yml@main
-      with:
-        PACKED_JS_PATH: ${{ env.PACKED_JS_PATH }}
-        packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
-        extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
+    with:
+      PACKED_JS_PATH: ${{ env.PACKED_JS_PATH }}
+      packedJsStatus_changes: ${{ steps.packedJsStatus.outputs.changes }}
+      extractBranch_branch: ${{ steps.extractBranch.outputs.branch }}
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
