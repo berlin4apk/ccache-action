@@ -129,7 +129,8 @@ jobs:
 
 
   call-update-dist-check2-doit:
-    if: ${{ failure() && needs.job0.outputs.job-conclusion == 'failure' }}
+    #if: ${{ failure() && needs.job0.outputs.job-conclusion == 'failure' }}
+    if: ${{ needs.job0.outputs.job-conclusion == 'failure' }}
     uses: berlin4apk/ccache-action/.github/workflows/update-dist-check2-doit.yml@main
     with:
       #config-path: .github/labeler.yml
