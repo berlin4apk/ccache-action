@@ -10,8 +10,10 @@ name: Check dist/
 on:
   push:
     branches:
-      - main
-      - ci-testing
+      - '*'
+      - 'main'
+      - 'ci-testing'
+      - 'testfoo'
     paths-ignore:
       - '**.md'
   pull_request:
@@ -29,15 +31,17 @@ jobs:
       - name: Set Node.js 16.x
         uses: actions/setup-node@v3.6.0
         with:
+          cache: 'npm'
           node-version: 16.x
 
-      - name: Install dependencies
+      - name: Install dependencies npm ci
         run: npm ci
 
-      - name: Rebuild the dist/ directory
-        run: |
-          npm run build
-          npm run package
+      - name: Rebuild the dist/ directory npm run build
+        run: npm run build --if-present
+        
+      - name: Rebuild the dist/ directory npm run package
+        run: npm run package --if-present
 
       - name: Compare the expected and actual dist/ directories
         run: |
