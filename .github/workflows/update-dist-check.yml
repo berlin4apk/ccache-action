@@ -132,7 +132,7 @@ jobs:
     if: ${{ failure() && needs.job0.outputs.job-conclusion == 'failure' }}
     uses: berlin4apk/ccache-action/.github/workflows/update-dist-check2-doit.yml@main
     with:
-      config-path: .github/labeler.yml
+      #config-path: .github/labeler.yml
       packedjspathjspath: ${{needs.job0.outputs.packedjspath}}
       packedjsstatuschanges: ${{needs.job0.outputs.packedjsstatus}}
       extractbranchbranch: ${{needs.job0.outputs.extractbranch}}
