@@ -60,6 +60,24 @@ jobs:
           env0_extractbranch: ${{ steps.extractbranch.outputs.branch }}
         run: echo "$OUTPUT1 $OUTPUT2 $env_packedjspath $env_packedjsstatus $env_extractbranch"
 
+      - name: Compare the expected and actual dist/ directories
+        run: |
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build.  See status below:"
+            git diff
+            exit 1
+          fi
+        id: diff
+      - name: step-call-update-dist-check2-doit
+        if: ${{ failure() && steps.diff.conclusion == 'failure' }}
+        uses: ./.github/workflows/update-dist-check2-doit.yml
+        with:
+          packedjspathjspath: ${{jobs.job0.outputs.packedjspath}}
+          packedjsstatuschanges: ${{jobs.job0.outputs.packedjsstatus}}
+          extractbranchbranch: ${{jobs.job0.outputs.extractbranch}}
+          testfoo: fooo
+        secrets:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
 # echo "changes=$(git status dist/restore/index.js dist/save/index.js --porcelain | tr -d [:cntrl:] | grep -E "$" || echo false)" >> $GITHUB_OUTPUT
 
@@ -110,11 +128,12 @@ jobs:
 
 
   call-update-dist-check2-doit:
+  if: ${{ failure() && steps.diff.conclusion == 'failure' }}
     uses: ./.github/workflows/update-dist-check2-doit.yml
     with:
-      packedjspathjspath: ${{needs.job0.outputs.packedjspath}}
-      packedjsstatuschanges: ${{needs.job0.outputs.packedjsstatus}}
-      extractbranchbranch: ${{needs.job0.outputs.extractbranch}}
+      packedjspathjspath: ${{jobs.job0.outputs.packedjspath}}
+      packedjsstatuschanges: ${{jobs.job0.outputs.packedjsstatus}}
+      extractbranchbranch: ${{jobs.job0.outputs.extractbranch}}
       testfoo: fooo
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
