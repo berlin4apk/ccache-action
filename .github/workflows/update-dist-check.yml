@@ -70,14 +70,14 @@ jobs:
         id: diff
       - name: step-call-update-dist-check2-doit
         if: ${{ failure() && steps.diff.conclusion == 'failure' }}
-        uses: berlin4apk/ccache-action/.github/workflows/update-dist-check2-doit.yml
+        uses: berlin4apk/ccache-action/.github/workflows/update-dist-check2-doit.yml@main
         with:
           packedjspathjspath: ${{jobs.job0.outputs.packedjspath}}
           packedjsstatuschanges: ${{jobs.job0.outputs.packedjsstatus}}
           extractbranchbranch: ${{jobs.job0.outputs.extractbranch}}
           testfoo: fooo
-        secrets:
-          token: ${{ secrets.GITHUB_TOKEN }}
+#        secrets:
+#          token: ${{ secrets.GITHUB_TOKEN }}
 
 # echo "changes=$(git status dist/restore/index.js dist/save/index.js --porcelain | tr -d [:cntrl:] | grep -E "$" || echo false)" >> $GITHUB_OUTPUT
 
@@ -128,13 +128,17 @@ jobs:
 
 
   call-update-dist-check2-doit:
-  if: ${{ failure() && steps.diff.conclusion == 'failure' }}
-    uses: ./.github/workflows/update-dist-check2-doit.yml
+    if: ${{ failure() && jobs.job0.steps.diff.conclusion == 'failure' }}
+    uses: berlin4apk/ccache-action/.github/workflows/update-dist-check2-doit.yml@main
     with:
+      config-path: .github/labeler.yml
       packedjspathjspath: ${{jobs.job0.outputs.packedjspath}}
       packedjsstatuschanges: ${{jobs.job0.outputs.packedjsstatus}}
       extractbranchbranch: ${{jobs.job0.outputs.extractbranch}}
       testfoo: fooo
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
-#${{needs.job1.outputs.output1}}
+      #envPAT: ${{ secrets.envPAT }}
+
+
+
