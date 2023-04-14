@@ -25,13 +25,25 @@ jobs:
   check-dist:
     runs-on: ubuntu-latest
     outputs:
-      job-conclusion: ${{ failure() && steps.diff.conclusion == 'failure' }}
-      job-ref: ${{ GITHUB_REF }}
+      job-conclusion: failure # ${{ failure() && steps.diff.conclusion == 'failure' }}
+      diff-conclusion: ${{ steps.diff.conclusion }}
+      job-ref: ${{ steps.extractREF.outputs.REF }}
       #packedjspath: ${{ steps.packedjspath.outputs.jspath }}
-      #extractbranch: ${{ steps.extractbranch.outputs.branch }}
+      extractbranch: ${{ steps.extractBranch.outputs.branch }}
+      extractref: ${{ steps.extractREF.outputs.REF }}
       #packedjsstatus: ${{ steps.packedjsstatus.outputs.changes }}
     steps:
       - uses: actions/checkout@v3
+
+      - name: extractBranch
+        id: extractBranch
+        shell: bash
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+
+      - name: extractREF
+        id: extractREF
+        shell: bash
+        run: echo "REF=$(echo ${GITHUB_REF})" >> $GITHUB_OUTPUT
 
       - name: Set Node.js 16.x
         uses: actions/setup-node@v3.6.0
@@ -53,6 +65,7 @@ jobs:
           if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
             echo "Detected uncommitted changes after build.  See status below:"
             git diff
+            echo "failure=failure" >> $GITHUB_OUTPUT
             exit 1
           fi
         id: diff
@@ -63,3 +76,5 @@ jobs:
         with:
           name: dist
           path: dist/
+
+
