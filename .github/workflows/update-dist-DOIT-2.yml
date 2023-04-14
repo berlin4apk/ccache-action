@@ -23,7 +23,7 @@ on:  # yamllint disable-line rule:truthy
 #        required: true
         type: string
       job-ref:
-        required: true
+#        required: true
         type: string
 #    secrets:
 #      token:
@@ -121,11 +121,11 @@ jobs:
           branch: ${{ steps.extractBranch.outputs.branch }}
           
       - name: Create annotation for build notice
-        run: echo "::notice branch ${{inputs.branch}}::branch updating"
+        run: echo "::notice branch ${{inputs.branch}} ${{ steps.extractBranch.outputs.branch }} ${{ steps.extractBranch_workflow_dispatch.outputs.branch }} ::branch updating"
       - name: Create annotation for GITHUB_STEP_SUMMARY
-        run: echo "branch updating ${{inputs.branch}}" >> $GITHUB_STEP_SUMMARY
+        run: echo "branch updating ${{inputs.branch}} ${{ steps.extractBranch.outputs.branch }} ${{ steps.extractBranch_workflow_dispatch.outputs.branch }}" >> $GITHUB_STEP_SUMMARY
 # not workiing #      - name: Create annotation for GITHUB_JOB_SUMMARY
-# not workiing #        run: echo "branch updating ${{inputs.branch}} Hello world! :rocket:" >> $GITHUB_JOB_SUMMARY
+# not workiing #        run: echo "branch updating ${{inputs.branch}} ${{ steps.extractBranch.outputs.branch }} ${{ steps.extractBranch_workflow_dispatch.outputs.branch }}Hello world! :rocket:" >> $GITHUB_JOB_SUMMARY
         
 
 
