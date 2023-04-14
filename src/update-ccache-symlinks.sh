@@ -2,6 +2,11 @@
 
 set -xv
 
+  # --pw=sudo: no password prompt here, rather fail ### FIXME
+  [ "$Sudo" ] && {
+    sudo -n echo 2>/dev/null && Sudo="sudo -n" || Sudo=""
+  }
+
 export $(dpkg-architecture)
 export -p | grep -i deb
 
@@ -15,12 +20,12 @@ sed -i -e 's|my $ccache_dir = "/usr/lib/ccache";|my $ccache_dir = "/usr/local/li
 #sed -i -e 's|    if (! -e "/usr/bin/$_") {|        print "Found existing symlinks $old_symlinks/$_\\n" if $verbose;      # mod #\n\0|' $PN/update-ccache-symlinks.pl
 sed -i -e 's|    if (! -e "/usr/bin/$_") {|        print "Found existing symlinks $_\\n" if $verbose;      # mod #\n\0|' $PN/update-ccache-symlinks.pl
 
-chmod 755 $PN/update-ccache-symlinks.pl
+$Sudo chmod 755 $PN/update-ccache-symlinks.pl
 
-[ -d /usr/local/bin/ ] || mkdir -p /usr/local/bin/
-[ -d /usr/local/lib/ccache/ ] || mkdir -p /usr/local/lib/ccache/
-[ -e /usr/local/bin/ccache ] || touch /usr/local/bin/ccache
-$PN/update-ccache-symlinks.pl
+$Sudo [ -d /usr/local/bin/ ] || mkdir -p /usr/local/bin/
+$Sudo [ -d /usr/local/lib/ccache/ ] || mkdir -p /usr/local/lib/ccache/
+$Sudo [ -e /usr/local/bin/ccache ] || touch /usr/local/bin/ccache
+$Sudo $PN/update-ccache-symlinks.pl
 # Q&D replacement for update-ccache-symlinks.pl # for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/local/bin/ccache /usr/local/lib/ccache/$t; done
 # merker # cd /usr/lib/ccache/ && ln -s /usr/lib/ccache/* /usr/local/bin/
 # cd /usr/local/bin && ln -s /usr/lib/ccache/bin/* .
@@ -36,9 +41,9 @@ echo '[ -d /usr/lib/ccache/ ] && export PATH="/usr/lib/ccache:$PATH"' | tee -a ~
 # Source bashrc to test the new PATH
 source ~/.bashrc && echo $PATH
 
-cd /usr/local/bin && ln -s /usr/local/lib/ccache/* .
+$Sudo cd /usr/local/bin && ln -s /usr/local/lib/ccache/* .
 #for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/bin/ccache /usr/local/bin/$t; done
-for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/local/bin/ccache /usr/local/bin/$t; done
+$Sudo for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/local/bin/ccache /usr/local/bin/$t; done
 
 # aufreumen
 # cd /usr/local/bin/ && rm g++ cc c++ clang clang++ *g++ *cc *c++ *clang *clang++
