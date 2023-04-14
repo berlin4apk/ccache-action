@@ -70,7 +70,7 @@ jobs:
         id: diff
       - name: step-call-update-dist-check2-doit
         if: ${{ failure() && steps.diff.conclusion == 'failure' }}
-        uses: ./.github/workflows/update-dist-check2-doit.yml
+        uses: berlin4apk/ccache-action/.github/workflows/update-dist-check2-doit.yml
         with:
           packedjspathjspath: ${{jobs.job0.outputs.packedjspath}}
           packedjsstatuschanges: ${{jobs.job0.outputs.packedjsstatus}}
