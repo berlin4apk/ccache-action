@@ -9,6 +9,34 @@ on:  # yamllint disable-line rule:truthy
     types: [completed]
     branches-ignore:
       - "canary"
+    inputs:
+      extractref:
+#        required: true
+        type: string
+      extractbranch:
+#        required: true
+        type: string
+      job-conclusion:
+#        required: true
+        type: string
+      diff-conclusion:
+#        required: true
+        type: string
+      job-ref:
+        required: true
+        type: string
+#    secrets:
+#      token:
+#        required: true
+
+#    inputs:
+#      job-conclusion:
+#        description: 'branch to work on'
+#        required: true
+#        default: 'main'
+#        type: string
+        
+      
 ##  push:
 ##    branches:
 ##      - '*'
