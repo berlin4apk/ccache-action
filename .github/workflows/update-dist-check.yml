@@ -17,6 +17,7 @@ jobs:
   job0:
     runs-on: ubuntu-latest
     outputs:
+      job-conclusion: failure
       packedjspath: ${{ steps.packedjspath.outputs.jspath }}
       extractbranch: ${{ steps.extractbranch.outputs.branch }}
       packedjsstatus: ${{ steps.packedjsstatus.outputs.changes }}
@@ -128,7 +129,7 @@ jobs:
 
 
   call-update-dist-check2-doit:
-    if: ${{ failure() && job.job0.conclusion == 'failure' }}
+    if: ${{ failure() && needs.job0.outputs.job-conclusion == 'failure' }}
     uses: berlin4apk/ccache-action/.github/workflows/update-dist-check2-doit.yml@main
     with:
       config-path: .github/labeler.yml
