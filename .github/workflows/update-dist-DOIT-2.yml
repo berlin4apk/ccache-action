@@ -124,8 +124,8 @@ jobs:
         run: echo "::notice branch ${{inputs.branch}}::branch updating"
       - name: Create annotation for GITHUB_STEP_SUMMARY
         run: echo "branch updating ${{inputs.branch}}" >> $GITHUB_STEP_SUMMARY
-      - name: Create annotation for GITHUB_JOB_SUMMARY
-        run: echo "branch updating ${{inputs.branch}} Hello world! :rocket:" >> $GITHUB_JOB_SUMMARY
+# not workiing #      - name: Create annotation for GITHUB_JOB_SUMMARY
+# not workiing #        run: echo "branch updating ${{inputs.branch}} Hello world! :rocket:" >> $GITHUB_JOB_SUMMARY
         
 
 
