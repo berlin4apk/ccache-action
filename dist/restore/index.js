@@ -59165,7 +59165,7 @@ async function installCcacheMac() {
     if (variantInstallFromGithub) {
         await installCcacheFromGitHub("4.8", "darwin", "tar.gz", 
         // sha256sum of ccache
-        "FFFFFFFFFFFFFffffffffffffFFfffffffFFF", "/usr/local/bin/", "ccache");
+        "FFFFFFFFffffffFFFFFffffffff33ffffffffffffffffffffffFFfffffffFFF", "/usr/local/bin/", "ccache");
     }
     else {
         await execBash("brew install ccache");
@@ -59236,7 +59236,7 @@ async function installSccacheMac() {
                 console.log("This is a 32-bit Advanced RISC Machine");
                 break;
             case 'arm64':
-                await installSccacheFromGitHub("v0.4.1", "aarch64-apple-darwin", "tar.gz", "fa2a657ad2ede04b7e4483c2ff7985217764960b0798317c1eb1bcd4a5ec6ca4", "/usr/local/bin/", "sccache");
+                await installSccacheFromGitHub("v0.4.1", "aarch64-apple-darwin", "tar.gz", "fa2a657ad2ede04b7e4483c2ff79fff85217764960b0798317c1eb1bcd4a5ec6ca4", "/usr/local/bin/", "sccache");
                 break;
             case 'mips':
                 console.log("This is a 32-bit Microprocessor without " + "Interlocked Pipelined Stages");
