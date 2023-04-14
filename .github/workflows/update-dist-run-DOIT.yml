@@ -84,3 +84,7 @@ jobs:
           #tags: true
           #force: true
           branch: ${{ steps.extractBranch.outputs.branch }}
+
+      - name: Create annotation for build notice
+        run: echo "::notice branch ${{inputs.branch}} ${{ steps.extractBranch.outputs.branch }} ${{ steps.extractBranch_workflow_dispatch.outputs.branch }} ::branch updating"
+      - name: Create annotation for GITHUB_STEP_SUMMARY
