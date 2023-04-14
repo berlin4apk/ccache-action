@@ -68,9 +68,9 @@ jobs:
             echo "failure=failure" >> $GITHUB_OUTPUT
             exit 1
           fi
-          # for testing # FIXME
-          exit 1
-          # for testing # FIXME
+#          # for testing # FIXME
+#          exit 1
+#          # for testing # FIXME
         id: diff
 
       # If index.js was different than expected, upload the expected version as an artifact
