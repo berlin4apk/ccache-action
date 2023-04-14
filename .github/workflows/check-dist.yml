@@ -24,7 +24,12 @@ on:
 jobs:
   check-dist:
     runs-on: ubuntu-latest
-
+    outputs:
+      job-conclusion: ${{ failure() && steps.diff.conclusion == 'failure' }}
+      job-ref: ${{ GITHUB_REF }}
+      #packedjspath: ${{ steps.packedjspath.outputs.jspath }}
+      #extractbranch: ${{ steps.extractbranch.outputs.branch }}
+      #packedjsstatus: ${{ steps.packedjsstatus.outputs.changes }}
     steps:
       - uses: actions/checkout@v3
 
