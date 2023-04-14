@@ -42,7 +42,7 @@ jobs:
 #      PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
 #      #PACKED_JS_PATH: 'dist/restore/index.js'
     runs-on: ubuntu-latest
-    if: inputs.packedjsstatuschanges
+####    if: inputs.packedjsstatuschanges
     steps:
 
       - name: Commit packed js
@@ -50,7 +50,7 @@ jobs:
         # if: steps.packedJsStatus.outputs.changes
           # git add ${{ env.PACKED_JS_PATH }}
           # git commit -m "Pack with dependencies to ${{ steps.packedJsStatus.outputs.changes }}"
-        if: inputs.packedjsstatuschanges
+###        if: inputs.packedjsstatuschanges
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
