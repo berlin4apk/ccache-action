@@ -58798,8 +58798,8 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
     fs__WEBPACK_IMPORTED_MODULE_1___default().mkdirSync(tmpdirname, { recursive: true });
     if (url.endsWith(".zip")) {
         const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, "dl.zip");
-        await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O '${zipName}'  '${url}' `);
-        await execBash(`unzip -j -C -d '${tmpdirname}' '${zipName}'`);
+        await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" `);
+        await execBash(` unzip -j -C -d "${tmpdirname}" "${zipName}" `);
     }
     else if (url.endsWith(".tar.xz")) {
         ////    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xJf - -O --wildcards '${srcFile}' > '${dstFile}'`);
@@ -58810,8 +58810,8 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
         ////    }
         //    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xJvf - -C '${tmpdirname}/' --strip-components=1 '${srcFile}'`);
         const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, "dl.tar.xz");
-        await execBash(`$(command -v curl -v --show-error -L || command -v wget -S ) -O '${zipName}'  '${url}' `);
-        await execBash(`$(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xJvf '${zipName}' `);
+        await execBash(` $(command -v curl -v --show-error -L || command -v wget -S ) -O "${zipName}"  "${url}"  `);
+        await execBash(` $(command -v gtar || command -v tar) -C "${tmpdirname}" --strip-components=1 -xJvf "${zipName}" `);
         //await execBash(`$(command -v curl -vvv -L --output - || command -v wget -O- ) '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xJvf - `);
         //    const dstDir = path.dirname(dstFile);
         //    if (!fs.existsSync(dstDir)) {
@@ -58831,8 +58831,8 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
         ////    }
         //    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xzvf - -C '${tmpdirname}/' --strip-components=1 '${srcFile}'`);
         const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, "dl.tar.gz");
-        await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O '${zipName}'  '${url}' `);
-        await execBash(`$(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xzvf '${zipName}' `);
+        await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" `);
+        await execBash(`$(command -v gtar || command -v tar) -C "${tmpdirname}" --strip-components=1 -xzvf "${zipName}" `);
         //await execBash(`$(command -v curl -vvv -L --output - || command -v wget -O- ) '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xzvf - `);
         //    const dstDir = path.dirname(dstFile);
         //    if (!fs.existsSync(dstDir)) {
