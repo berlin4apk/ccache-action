@@ -102,9 +102,9 @@ async function installCcacheMac() : Promise<void> {
   //if (core.getState("variantInstallFromGithub") !== "true") {
 //  const variantInstallFromGithub = core.getInput('install-from-github');
   if (variantInstallFromGithub) {
-    core.warning('variantInstallFromGithub was IS set');
+//    core.warning('variantInstallFromGithub was IS set');
       } else {
-    core.warning('variantInstallFromGithub was NOT set');
+//    core.warning('variantInstallFromGithub was NOT set');
   }
   if (variantInstallFromGithub) {
     await installCcacheFromGitHub(
@@ -127,9 +127,9 @@ async function installCcacheLinux() : Promise<void> {
   //if (core.getState("variantInstallFromGithub") !== "true") {
 //  const variantInstallFromGithub = core.getInput('install-from-github');
   if (variantInstallFromGithub) {
-    core.warning('variantInstallFromGithub was IS set');
+ //   core.warning('variantInstallFromGithub was IS set');
       } else {
-    core.warning('variantInstallFromGithub was NOT set');
+//    core.warning('variantInstallFromGithub was NOT set');
   }
   if (variantInstallFromGithub) {
     await installCcacheFromGitHub(
@@ -148,9 +148,9 @@ async function installCcacheLinux() : Promise<void> {
 
 async function installCcacheWindows() : Promise<void> {
   if (variantInstallFromGithub) {
-    core.warning('variantInstallFromGithub was IS set');
+//    core.warning('variantInstallFromGithub was IS set');
       } else {
-    core.warning('variantInstallFromGithub was NOT set');
+ //   core.warning('variantInstallFromGithub was NOT set');
   }
   if (variantInstallFromGithub) {
   await installCcacheFromGitHub(
@@ -178,9 +178,9 @@ async function installSccacheMac() : Promise<void> {
   //if (core.getState("variantInstallFromGithub") !== "true") {
 //  const variantInstallFromGithub = core.getInput('install-from-github');
   if (variantInstallFromGithub) {
-    core.warning('variantInstallFromGithub was IS set');
+//    core.warning('variantInstallFromGithub was IS set');
       } else {
-    core.warning('variantInstallFromGithub was NOT set');
+//    core.warning('variantInstallFromGithub was NOT set');
   }
   if (variantInstallFromGithub) {
    switch(process.arch) {
@@ -244,9 +244,9 @@ async function installSccacheLinux() : Promise<void> {
 
 async function installSccacheWindows() : Promise<void> {
   if (variantInstallFromGithub) {
-    core.warning('variantInstallFromGithub was IS set');
+//    core.warning('variantInstallFromGithub was IS set');
       } else {
-    core.warning('variantInstallFromGithub was NOT set');
+//    core.warning('variantInstallFromGithub was NOT set');
   }
   if (variantInstallFromGithub) {
   await installSccacheFromGitHub(
