@@ -10,7 +10,7 @@ import * as cache from "@actions/cache";
 
 export enum Inputs {
     VariantInstallFromGithub = "install-from-github", // Input for cache, restore action
-    DontDoConfig = "dont-do-config" // Input for cache, restore action
+  DontDoConfig = 'dont-do-config' // Input for cache, restore action
 }
 
 export function utilsGetInputAsBool(
@@ -21,13 +21,17 @@ export function utilsGetInputAsBool(
     return result.toLowerCase() === "true";
 }
 
-const variantInstallFromGithub = utilsGetInputAsBool(Inputs.VariantInstallFromGithub);
+const variantInstallFromGithub = utilsGetInputAsBool(
+  Inputs.VariantInstallFromGithub
+)
         if (variantInstallFromGithub) {
-            core.info(`global: variantInstallFromGithub is SET: ${variantInstallFromGithub}`);
+  core.info(
+    `global: variantInstallFromGithub is SET: ${variantInstallFromGithub}`
         } else {
-            core.info(`global: variantInstallFromGithub is NOT set: ${variantInstallFromGithub}`);
+  core.info(
+    `global: variantInstallFromGithub is NOT set: ${variantInstallFromGithub}`
         }
-        await execBash(`set -vx ; uname -a`);
+await execBash(`set -vx ; uname -a`)
 //        await execBash(`set -vx ; uname -m`);
 //        await execBash(`set -vx ; uname -n`);
 //        await execBash(`set -vx ; uname -r`);
@@ -37,12 +41,11 @@ const variantInstallFromGithub = utilsGetInputAsBool(Inputs.VariantInstallFromGi
 // on macos 21.6.0 // uname: illegal option -- i //       await execBash(`set -vx ; uname -i`);
 // on macos 21.6.0 // uname: illegal option -- o //       await execBash(`set -vx ; uname -o`);
 
-
-const SELF_CI = process.env["CCACHE_ACTION_CI"] === "true"
+const SELF_CI = process.env['CCACHE_ACTION_CI'] === 'true'
 
 // based on https://cristianadam.eu/20200113/speeding-up-c-plus-plus-github-actions-using-ccache/
 
-async function restore(ccacheVariant : string) : Promise<void> {
+async function restore(ccacheVariant: string): Promise<void> {
   const inputs = {
     primaryKey: core.getInput("key"),
     // https://github.com/actions/cache/blob/73cb7e04054996a98d39095c0b7821a73fb5b3ea/src/utils/actionUtils.ts#L56

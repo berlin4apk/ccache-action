@@ -2,7 +2,10 @@ import * as core from "@actions/core";
 import * as cache from "@actions/cache";
 import * as exec from "@actions/exec";
 
-async function ccacheIsEmpty(ccacheVariant : string, ccacheKnowsVerbosityFlag : boolean) : Promise<boolean> {
+async function ccacheIsEmpty(
+  ccacheVariant: string,
+  ccacheKnowsVerbosityFlag: boolean
+): Promise<boolean> {
   if (ccacheVariant === "ccache") {
     if (ccacheKnowsVerbosityFlag) {
       return !!(await getExecBashOutput("ccache -s -v")).stdout.match(/Files:.+\b0\b/);
@@ -17,22 +20,25 @@ async function ccacheIsEmpty(ccacheVariant : string, ccacheKnowsVerbosityFlag : 
 async function getVerbosity(verbositySetting : string) : Promise<string> {
   switch (verbositySetting) {
     case '0':
-      return '';
+      return ''
 
     case '1':
-      return ' -v';
+      return ' -v'
 
     case '2':
-      return ' -vv';
+      return ' -vv'
 
     default:
-      core.warning(`Invalid value "${verbositySetting}" of "verbose" option ignored.`);
+      core.warning(
+        
+        `Invalid value "${verbositySetting}" of "verbose" option ignored.`
+      )
       return '';
   }
 }
 
 function getExecBashOutput(cmd : string) : Promise<exec.ExecOutput> {
-  return exec.getExecOutput("bash", ["-xc", cmd], {silent: true});
+  return exec.getExecOutput('bash', ['-xc', cmd], {silent: true})
 }
 
 async function run() : Promise<void> {
@@ -49,10 +55,15 @@ async function run() : Promise<void> {
     }
 
     // Some versions of ccache do not support --verbose
-    const ccacheKnowsVerbosityFlag = !!(await getExecBashOutput(`${ccacheVariant} --help`)).stdout.includes("--verbose");
+    const ccacheKnowsVerbosityFlag = !!(
+      await getExecBashOutput(`${ccacheVariant} --help`)
+    ).stdout.includes('--verbose')
 
     core.startGroup(`${ccacheVariant} stats`);
-    const verbosity = ccacheKnowsVerbosityFlag ? await getVerbosity(core.getInput("verbose")) : '';
+    const verbosity = ccacheKnowsVerbosityFlag
+
+      ? await getVerbosity(core.getInput('verbose'))
+      : ''
     await exec.exec(`${ccacheVariant} -s${verbosity}`);
     core.endGroup();
 
@@ -77,6 +88,6 @@ async function run() : Promise<void> {
   }
 }
 
-run();
+run()
 
-export default run;
+export default run
