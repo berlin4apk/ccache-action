@@ -397,8 +397,8 @@ async function downloadAndExtract (url : string, srcFile : string, dstFile : str
       fs.mkdirSync(tmpdirname, { recursive: true });
   if (url.endsWith(".zip")) {
     const zipName = path.join(tmpdirname, "dl.zip");
-    await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O '${zipName}'  '${url}' `);
-    await execBash(`unzip -j -C -d '${tmpdirname}' '${zipName}'`);
+    await execBash("$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" ");
+    await execBash("unzip -j -C -d "${tmpdirname}" "${zipName}" ");
   } else if (url.endsWith(".tar.xz")) {
 ////    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xJf - -O --wildcards '${srcFile}' > '${dstFile}'`);
 ////    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), ""));
@@ -408,8 +408,8 @@ async function downloadAndExtract (url : string, srcFile : string, dstFile : str
 ////    }
 //    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xJvf - -C '${tmpdirname}/' --strip-components=1 '${srcFile}'`);
     const zipName = path.join(tmpdirname, "dl.tar.xz");
-    await execBash(`$(command -v curl -v --show-error -L || command -v wget -S ) -O '${zipName}'  '${url}' `);
-    await execBash(`$(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xJvf '${zipName}' `);
+    await execBash(" $(command -v curl -v --show-error -L || command -v wget -S ) -O "${zipName}"  "${url}"  ");
+    await execBash(" $(command -v gtar || command -v tar) -C "${tmpdirname}" --strip-components=1 -xJvf "${zipName}" ");
     //await execBash(`$(command -v curl -vvv -L --output - || command -v wget -O- ) '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xJvf - `);
 //    const dstDir = path.dirname(dstFile);
 //    if (!fs.existsSync(dstDir)) {
