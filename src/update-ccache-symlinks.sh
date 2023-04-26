@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+set -xv
+
+_has_command() {
+  # well, this is exactly `for cmd in "$@"; do`
+  for cmd do
+    command -v "$cmd" >/dev/null 2>&1 || return 1
+  done
+}
+     _has_command sudo && {
+    sudo -n echo 2>/dev/null && SudoVAR="-n $SudoVAR" || SudoVAR="$SudoVAR"
+  }
+     _has_command sudo && {
+    sudo -E echo 2>/dev/null && SudoE="sudo -E $SudoVAR" || SudoVAR="$SudoVAR"
+  }
+     _has_command sudo && {
+    sudo echo 2>/dev/null && Sudo="sudo $SudoVAR" || Sudo=""
+  }
+
+export "$(dpkg-architecture)"
+export -p | grep -i deb
+
+PN=$(dirname "$0")
+
+#sed s/%DEB_HOST_MULTIARCH%/$(DEB_HOST_MULTIARCH)/ debian/update-ccache-symlinks.in >debian/ccache/usr/sbin/update-ccache-symlinks
+# shellcheck disable=SC2016
+sed -e "s/%DEB_HOST_MULTIARCH%/$(DEB_HOST_MULTIARCH)/" "$PN"/update-ccache-symlinks.in > "$PN"/update-ccache-symlinks.pl
+#sed -i -e 's/my $verbose = 0;/my $verbose = 1;/' "$PN"/update-ccache-symlinks.pl
+# shellcheck disable=SC2016
+sed -i -e 's|my $verbose = 0;|my $verbose = 1;      # mod # \0|' "$PN"/update-ccache-symlinks.pl
+# shellcheck disable=SC2016
+sed -i -e 's|my $ccache_dir = "/usr/lib/ccache";|my $ccache_dir = "/usr/local/lib/ccache";      # mod # \0|' "$PN"/update-ccache-symlinks.pl
+#sed -i -e 's|    if (! -e "/usr/bin/$_") {|        print "Found existing symlinks $old_symlinks/$_\\n" if $verbose;      # mod #\n\0|' "$PN"/update-ccache-symlinks.pl
+# shellcheck disable=SC2016
+sed -i -e 's|    if (! -e "/usr/bin/$_") {|        print "Found existing symlinks $_\\n" if $verbose;      # mod #\n\0|' "$PN"/update-ccache-symlinks.pl
+
+chmod 755 "$PN"/update-ccache-symlinks.pl
+
+[ -d /usr/local/bin/ ] || $Sudo mkdir -p /usr/local/bin/
+[ -d /usr/local/lib/ccache/ ] || $Sudo mkdir -p /usr/local/lib/ccache/
+[ -e /usr/local/bin/ccache ] || $Sudo touch /usr/local/bin/ccache
+$Sudo "$PN"/update-ccache-symlinks.pl
+# Q&D replacement for update-ccache-symlinks.pl # for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/local/bin/ccache /usr/local/lib/ccache/$t; done
+# merker # cd /usr/lib/ccache/ && ln -s /usr/lib/ccache/* /usr/local/bin/
+# cd /usr/local/bin && ln -s /usr/lib/ccache/bin/* .
+#cd /usr/local/bin && ln -s /usr/local/lib/ccache/* .
+
+
+
+# Prepend ccache into the PATH
+# shellcheck disable=SC2016
+echo '[ -d /usr/local/lib/ccache/ ] && export PATH="/usr/local/lib/ccache:$PATH"' | tee -a ~/.bashrc
+# shellcheck disable=SC2016
+echo '[ -d /usr/lib64/ccache/ ] && export PATH="/usr/lib64/ccache:$PATH"' | tee -a ~/.bashrc
+# shellcheck disable=SC2016
+echo '[ -d /usr/lib/ccache/ ] && export PATH="/usr/lib/ccache:$PATH"' | tee -a ~/.bashrc
+#echo 'export CONFIG_CCACHE=y' | tee -a ~/.bashrc
+# Source bashrc to test the new PATH
+source ~/.bashrc && echo "$PATH"
+
+cd /usr/local/bin && $Sudo ln -s /usr/local/lib/ccache/* .
+#for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/bin/ccache /usr/local/bin/$t; done
+for t in gcc g++ cc c++ clang clang++; do $Sudo ln -vs /usr/local/bin/ccache /usr/local/bin/$t; done
+
+# aufreumen
+# cd /usr/local/bin/ && rm g++ cc c++ clang clang++ *g++ *cc *c++ *clang *clang++
+
+# https://www.methodpark.de/blog/the-c-c-developers-guide-to-avoiding-office-swordfights-part-1-ccache/
+# on On Debian/Ubuntu:
+# export PATH="/usr/lib/ccache:$PATH"
+# On Fedora/CentOS/RHEL:
+# $ export PATH="/usr/lib64/ccache:$PATH"
+# with my /usr/local copyed ccache binary
+# $ export PATH="/usr/local/lib/ccache:$PATH"

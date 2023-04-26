@@ -1,0 +1,79 @@
+---
+# # https://docs.github.com/en/actions/using-workflows/reusing-workflows
+# see https://github.com/cardinalby/git-get-release-action/blob/master/.github/workflows/build-pack.yml
+
+name: "update-dist-run"
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - '*'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to work on'
+        required: true
+        default: 'main'
+        type: string
+  
+jobs:
+  update-dist-run-buildPack:
+    env:
+      #PACKED_JS_PATH: 'dist/index.js'
+      PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
+      #PACKED_JS_PATH: 'dist/restore/index.js'
+    runs-on: ubuntu-latest
+    steps:
+      - name: actions/checkout workflow_dispatch with branch ${{inputs.branch}}
+        uses: actions/checkout@v3
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          ref: ${{inputs.branch}}
+      - name: actions/checkout 
+        uses: actions/checkout@v3
+        if: github.event_name != 'workflow_dispatch'
+      - name: Extract branch name workflow_dispatch with branch ${{inputs.branch}}
+        if: github.event_name == 'workflow_dispatch'
+        id: extractBranch_workflow_dispatch
+        shell: bash
+        run: echo "branch=$(echo ${{inputs.branch}})" >> $GITHUB_OUTPUT
+      - name: Extract branch name
+        if: github.event_name != 'workflow_dispatch'
+        id: extractBranch
+        shell: bash
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build --if-present
+      - name: Package
+        run: npm run package --if-present
+      - name: Check packed js changes
+        id: packedJsStatus
+        run: echo "changes=$(git status ${{ env.PACKED_JS_PATH }} --porcelain | tr -d [:cntrl:])" >> $GITHUB_OUTPUT
+      - name: CALL update-dist-run-DOIT workflow_dispatch with branch ${{inputs.branch}}
+        id: commitPackedJs_workflow_dispatch
+        if: |
+          github.event_name == 'workflow_dispatch'
+          && steps.packedJsStatus.outputs.changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run -f branch=${{inputs.branch}} update-dist-run-DOIT
+      - name: CALL update-dist-run-DOIT
+        id: commitPackedJs
+        if: |
+          github.event_name != 'workflow_dispatch'
+          && steps.packedJsStatus.outputs.changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run -f branch=${{ steps.extractBranch.outputs.branch }} update-dist-run-DOIT
+
+      - name: Create annotation for build notice
+        run: echo "::notice branch ${{inputs.branch}} ${{ steps.extractBranch.outputs.branch }} ${{ steps.extractBranch_workflow_dispatch.outputs.branch }} ::branch updating"
+      - name: Create annotation for GITHUB_STEP_SUMMARY
+        run: echo "branch updating ${{inputs.branch}} ${{ steps.extractBranch.outputs.branch }} ${{ steps.extractBranch_workflow_dispatch.outputs.branch }}" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,147 @@
+---
+# see https://github.com/cardinalby/git-get-release-action/blob/master/.github/workflows/build-pack.yml
+
+name: "update-dist-check-yml"
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - '*'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
+
+
+jobs:
+  update-dist-check:
+    runs-on: ubuntu-latest
+    outputs:
+      job-conclusion: 'failure'
+      packedjspath: ${{ steps.packedjspath.outputs.jspath }}
+      extractbranch: ${{ steps.extractbranch.outputs.branch }}
+      packedjsstatus: ${{ steps.packedjsstatus.outputs.changes }}
+      # PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
+      # env:
+      # PACKED_JS_PATH: 'dist/index.js'
+      # PACKED_JS_PATH: 'dist/restore/index.js dist/save/index.js'
+      # PACKED_JS_PATH: 'dist/restore/index.js'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract PACKED_JS_PATH
+        id: packedjspath
+        shell: bash
+        # run: echo "jspath=$(echo ${{ env.PACKED_JS_PATH }})" >> $GITHUB_OUTPUT
+        run: |
+          echo "jspath=$(echo ${PACKED_JS_PATH})" >> $GITHUB_OUTPUT
+      - name: Extract branch name
+        id: extractbranch
+        shell: bash
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build --if-present
+      - name: Package
+        run: npm run package --if-present
+      - name: Check packed js changes
+        id: packedjsstatus
+        run: |
+          changes=$(git status dist/restore/index.js dist/save/index.js --porcelain | tr -d [:cntrl:] ; ); [[ "x" = "x$changes" ]] && changes="false" ;
+          echo "changes=$changes" >> $GITHUB_OUTPUT
+      - env:
+          # OUTPUT1: ${{needs.job1.outputs.output1}}
+          # OUTPUT2: ${{needs.job1.outputs.output2}}
+          env0_packedjspath: ${{ steps.packedjspath.outputs.jspath }}
+          env0_packedjsstatus: ${{ steps.packedjsstatus.outputs.changes }}
+          env0_extractbranch: ${{ steps.extractbranch.outputs.branch }}
+        run: echo "$OUTPUT1 $OUTPUT2 $env_packedjspath $env_packedjsstatus $env_extractbranch"
+
+      - name: Compare the expected and actual dist/ directories
+        run: |
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build.  See status below:"
+            git diff
+            exit 1
+          fi
+        id: diff
+#      - name: step-call-update-dist-check2-doit
+#        if: ${{ failure() && steps.diff.conclusion == 'failure' }}
+#        uses: berlin4apk/ccache-action/.github/workflows/update-dist-check2-doit.yml@main
+#        with:
+#          packedjspathjspath: ${{jobs.job0.outputs.packedjspath}}
+#          packedjsstatuschanges: ${{jobs.job0.outputs.packedjsstatus}}
+#          extractbranchbranch: ${{jobs.job0.outputs.extractbranch}}
+#          testfoo: fooo
+#        secrets:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+
+# echo "changes=$(git status dist/restore/index.js dist/save/index.js --porcelain | tr -d [:cntrl:] | grep -E "$" || echo false)" >> $GITHUB_OUTPUT
+
+#  if: steps.packedJsStatus.outputs.changes
+#    permissions:
+#      contents: read
+#      pull-requests: write
+
+# jobs:
+#  call-another-reusable:
+#    uses: octo-org/example-repo/.github/workflows/another-reusable.yml@v1
+
+# jobs:
+#  call-another-reusable:
+#    uses: octo-org/example-repo/.github/workflows/another-reusable.yml@v1
+#    runs-on: ubuntu-latest
+#    needs: update-dist-check
+# - run: echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}
+
+  job1:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      output1: ${{ steps.step1.outputs.test }}
+      output2: ${{ steps.step2.outputs.test }}
+    steps:
+      - id: step1
+        run: echo "test=hello" >> "$GITHUB_OUTPUT"
+      - id: step2
+        run: echo "test=world" >> "$GITHUB_OUTPUT"
+  job2:
+    runs-on: ubuntu-latest
+    needs: job1
+    steps:
+      - name: echo-test
+        id: echo-testfoo
+        run: echo "$env_packedjspath $env_packedjsstatus $env_extractbranch"
+        env:
+          OUTPUT1: ${{needs.job1.outputs.output1}}
+          OUTPUT2: ${{needs.job1.outputs.output2}}
+          env_packedjspath: ${{needs.job0.outputs.packedjspath}}
+          env_packedjsstatus: ${{needs.job0.outputs.packedjsstatus}}
+          env_extractbranch: ${{needs.job0.outputs.extractbranch}}
+      - id: job2step1foo
+        run: echo "$OUTPUT1 $OUTPUT2"
+      - id: job2step2foo
+        run: echo "$env_packedjspath $env_packedjsstatus $env_extractbranch"
+
+
+  call-update-dist-check2-doit:
+    needs: update-dist-check
+    #if: ${{ failure() && needs.update-dist-check.outputs.job-conclusion == 'failure' }}
+    #if: ${{ needs.job0.outputs.update-dist-check-conclusion == 'failure' }}
+    uses: berlin4apk/ccache-action/.github/workflows/update-dist-check2-doit.yml@main
+    with:
+      #config-path: .github/labeler.yml
+      packedjspathjspath: ${{needs.update-dist-check.outputs.packedjspath}}
+      packedjsstatuschanges: ${{needs.update-dist-check.outputs.packedjsstatus}}
+      extractbranchbranch: ${{needs.update-dist-check.outputs.extractbranch}}
+      testfoo: fooo
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+      #envPAT: ${{ secrets.envPAT }}
+
+
+
