@@ -15063,11 +15063,47 @@ function objectHasProperty(thing, property) {
 
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
+/**
+ * Generated Universally Unique Identifier
+ *
+ * @returns RFC4122 v4 UUID.
+ */
+function generateUUID() {
+    let uuid = "";
+    for (let i = 0; i < 32; i++) {
+        // Generate a random number between 0 and 15
+        const randomNumber = Math.floor(Math.random() * 16);
+        // Set the UUID version to 4 in the 13th position
+        if (i === 12) {
+            uuid += "4";
+        }
+        else if (i === 16) {
+            // Set the UUID variant to "10" in the 17th position
+            uuid += (randomNumber & 0x3) | 0x8;
+        }
+        else {
+            // Add a random hexadecimal digit to the UUID string
+            uuid += randomNumber.toString(16);
+        }
+        // Add hyphens to the UUID string at the appropriate positions
+        if (i === 7 || i === 11 || i === 15 || i === 19) {
+            uuid += "-";
+        }
+    }
+    return uuid;
+}
+
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 var _a;
 // NOTE: This is a workaround until we can use `globalThis.crypto.randomUUID` in Node.js 19+.
-const uuidFunction = typeof ((_a = globalThis === null || globalThis === void 0 ? void 0 : globalThis.crypto) === null || _a === void 0 ? void 0 : _a.randomUUID) === "function"
+let uuidFunction = typeof ((_a = globalThis === null || globalThis === void 0 ? void 0 : globalThis.crypto) === null || _a === void 0 ? void 0 : _a.randomUUID) === "function"
     ? globalThis.crypto.randomUUID.bind(globalThis.crypto)
     : crypto.randomUUID;
+// Not defined in earlier versions of Node.js 14
+if (!uuidFunction) {
+    uuidFunction = generateUUID;
+}
 /**
  * Generated Universally Unique Identifier
  *
@@ -23823,7 +23859,7 @@ const timeoutInSeconds = {
 const version = {
     parameterPath: "version",
     mapper: {
-        defaultValue: "2021-12-02",
+        defaultValue: "2022-11-02",
         isConstant: true,
         serializedName: "x-ms-version",
         type: {
@@ -28654,8 +28690,8 @@ const logger = logger$1.createClientLogger("storage-blob");
 
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-const SDK_VERSION = "12.13.0";
-const SERVICE_VERSION = "2021-12-02";
+const SDK_VERSION = "12.14.0";
+const SERVICE_VERSION = "2022-11-02";
 const BLOCK_BLOB_MAX_UPLOAD_BLOB_BYTES = 256 * 1024 * 1024; // 256MB
 const BLOCK_BLOB_MAX_STAGE_BLOCK_BYTES = 4000 * 1024 * 1024; // 4000MB
 const BLOCK_BLOB_MAX_BLOCKS = 50000;
@@ -30513,7 +30549,7 @@ class StorageSharedKeyCredential extends Credential {
  * Changes may cause incorrect behavior and will be lost if the code is regenerated.
  */
 const packageName = "azure-storage-blob";
-const packageVersion = "12.13.0";
+const packageVersion = "12.14.0";
 class StorageClientContext extends coreHttp__namespace.ServiceClient {
     /**
      * Initializes a new instance of the StorageClientContext class.
@@ -30539,7 +30575,7 @@ class StorageClientContext extends coreHttp__namespace.ServiceClient {
         // Parameter assignments
         this.url = url;
         // Assigning values to Constant parameters
-        this.version = options.version || "2021-12-02";
+        this.version = options.version || "2022-11-02";
     }
 }
 
@@ -34565,6 +34601,9 @@ class BlobClient extends StorageClient {
             // (url: string, credential?: StorageSharedKeyCredential | AnonymousCredential | TokenCredential, options?: StoragePipelineOptions)
             // The second parameter is undefined. Use anonymous credential.
             url = urlOrConnectionString;
+            if (blobNameOrOptions && typeof blobNameOrOptions !== "string") {
+                options = blobNameOrOptions;
+            }
             pipeline = newPipeline(new AnonymousCredential(), options);
         }
         else if (credentialOrPipelineOrContainerName &&
@@ -35868,6 +35907,9 @@ class BlockBlobClient extends BlobClient {
             // (url: string, credential?: StorageSharedKeyCredential | AnonymousCredential | TokenCredential, options?: StoragePipelineOptions)
             // The second parameter is undefined. Use anonymous credential.
             url = urlOrConnectionString;
+            if (blobNameOrOptions && typeof blobNameOrOptions !== "string") {
+                options = blobNameOrOptions;
+            }
             pipeline = newPipeline(new AnonymousCredential(), options);
         }
         else if (credentialOrPipelineOrContainerName &&
