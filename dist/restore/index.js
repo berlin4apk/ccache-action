@@ -61816,10 +61816,10 @@ async function installSccacheWindows() {
     }
 }
 async function execBash(cmd) {
-    await _actions_exec__WEBPACK_IMPORTED_MODULE_6__.exec("bash", ["-xc", cmd]);
+    await _actions_exec__WEBPACK_IMPORTED_MODULE_6__.exec('bash', ['-xc', cmd]);
 }
 async function execBashSudo(cmd) {
-    await execBash("$(which sudo) " + cmd);
+    await execBash(`$(which sudo) ${cmd}`);
 }
 async function installCcacheFromGitHub(version, artifactName, artifactType, binSha256, binDir, binName) {
     const archiveName = `ccache-${version}-${artifactName}.${artifactType}`;
@@ -61889,10 +61889,10 @@ async function installSccacheFromGitHub(version, artifactName, artifactType, bin
 async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
     //    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), ""));
     //    const pathsep = os.path.sep();
-    const pathsep0 = ((__nccwpck_require__(9411).sep));
+    const pathsep0 = (__nccwpck_require__(9411).sep);
     const pathsepstr = (__nccwpck_require__(9411).sep.toString)();
     //    const pathsep = (`tmpfoo-XXXXXX${pathsep0}`);
-    const pathsep = (`tmpfoo-XXXXXX${pathsep0}`).toString();
+    const pathsep = `tmpfoo-XXXXXX${pathsep0}`.toString();
     //    const pathseptmpfoo = ("tmpfoo-XXXXXX" + pathsep0).toString();
     //    const pathseptmpfoo = ("tmpfoo-XXXXXX" + pathsep0).toString();    
     console.log("pathsep0 " + "${pathsep}");
@@ -61928,12 +61928,12 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
     //        core.info(`core.info: tmpdirname ${tmpdirname} ### tmpdirname2 ${tmpdirname2}.### tmpdirname3 ${tmpdirname3}.### tmpdirname4 ${tmpdirname4}.###  `);
     //    if (!fs.existsSync(tmpdirname)) {
     fs__WEBPACK_IMPORTED_MODULE_1___default().mkdirSync(tmpdirname, { recursive: true });
-    if (url.endsWith(".zip")) {
-        const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, "dl.zip");
+    if (url.endsWith('.zip')) {
+        const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, 'dl.zip');
         await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" `);
         await execBash(` unzip -j -C -d "${tmpdirname}" "${zipName}" `);
     }
-    else if (url.endsWith(".tar.xz")) {
+    else if (url.endsWith('.tar.xz')) {
         ////    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xJf - -O --wildcards '${srcFile}' > '${dstFile}'`);
         ////    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), ""));
         //    const tmpdirname = fs.mkdtempSync(path.join(os.tmpdir(), "tmp-"));
@@ -61941,7 +61941,7 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
         //      fs.mkdirSync(tmpdirname, { recursive: true });
         ////    }
         //    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xJvf - -C '${tmpdirname}/' --strip-components=1 '${srcFile}'`);
-        const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, "dl.tar.xz");
+        const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, 'dl.tar.xz');
         await execBash(` $(command -v curl -v --show-error -L || command -v wget -S ) -O "${zipName}"  "${url}"  `);
         await execBash(` $(command -v gtar || command -v tar) -C "${tmpdirname}" --strip-components=1 -xJvf "${zipName}" `);
         //await execBash(`$(command -v curl -vvv -L --output - || command -v wget -O- ) '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xJvf - `);
@@ -61962,7 +61962,7 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
         //      fs.mkdirSync(tmpdirname, { recursive: true });
         ////    }
         //    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xzvf - -C '${tmpdirname}/' --strip-components=1 '${srcFile}'`);
-        const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, "dl.tar.gz");
+        const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, 'dl.tar.gz');
         await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" `);
         await execBash(`$(command -v gtar || command -v tar) -C "${tmpdirname}" --strip-components=1 -xzvf "${zipName}" `);
         //await execBash(`$(command -v curl -vvv -L --output - || command -v wget -O- ) '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xzvf - `);
@@ -62014,7 +62014,7 @@ async function runInner() {
         ccachePath = await _actions_io__WEBPACK_IMPORTED_MODULE_5__.which(ccacheVariant, true);
         _actions_core__WEBPACK_IMPORTED_MODULE_4__.endGroup();
     }
-    _actions_core__WEBPACK_IMPORTED_MODULE_4__.startGroup("Restore cache");
+    _actions_core__WEBPACK_IMPORTED_MODULE_4__.startGroup('Restore cache');
     await restore(ccacheVariant);
     _actions_core__WEBPACK_IMPORTED_MODULE_4__.endGroup();
     _actions_core__WEBPACK_IMPORTED_MODULE_4__.startGroup(`Configure ${ccacheVariant}`);
