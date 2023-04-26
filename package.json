@@ -9,12 +9,17 @@
     "format": "prettier --write '**/*.ts'",
     "format-check": "prettier --check '**/*.ts'",
     "lint": "eslint src/**/*.ts",
-    "package": "ncc build --target es2020 -o dist/restore src/restore.ts && ncc build --target es2020 -o dist/save src/save.ts",
+    "package": "ncc --debug build --target es2020 -o dist/restore src/restore.ts && ncc --debug build --target es2020 -o dist/save src/save.ts",
     "test": "jest --passWithNoTests",
     "test-force": "jest",
     "all-package": "npm run build && npm run package",
     "all-formart": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
+  "files": [
+    "src/update-ccache-symlinks.sh",
+    "third-party/debian-ccache/debian/update-ccache-symlinks.in",
+    "third-party/debian-ccache/debian/update-ccache-symlinks.8"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hendrikmuhs/ccache-action.git"
