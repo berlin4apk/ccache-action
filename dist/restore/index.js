@@ -58798,7 +58798,7 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
     fs__WEBPACK_IMPORTED_MODULE_1___default().mkdirSync(tmpdirname, { recursive: true });
     if (url.endsWith(".zip")) {
         const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, "dl.zip");
-        await execBash(`$(command -v curl -L  || command -v wget) '${url}' -o '${zipName}'`);
+        await execBash(`$(command -v curl -L  || command -v wget) '${url}' -O '${zipName}'`);
         await execBash(`unzip -j -C -d '${tmpdirname}' '${zipName}'`);
     }
     else if (url.endsWith(".tar.xz")) {
@@ -58809,7 +58809,7 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
         //      fs.mkdirSync(tmpdirname, { recursive: true });
         ////    }
         //    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xJvf - -C '${tmpdirname}/' --strip-components=1 '${srcFile}'`);
-        await execBash(`$(command -v curl -L  || command -v wget) '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xJvf - `);
+        await execBash(`$(command -v curl -L  || command -v wget) -O- '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xJvf - `);
         //    const dstDir = path.dirname(dstFile);
         //    if (!fs.existsSync(dstDir)) {
         //      fs.mkdirSync(dstDir, { recursive: true });
@@ -58827,7 +58827,7 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
         //      fs.mkdirSync(tmpdirname, { recursive: true });
         ////    }
         //    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xzvf - -C '${tmpdirname}/' --strip-components=1 '${srcFile}'`);
-        await execBash(`$(command -v curl -L  || command -v wget) '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xzvf - `);
+        await execBash(`$(command -v curl -L  || command -v wget) -O- '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xzvf - `);
         //    const dstDir = path.dirname(dstFile);
         //    if (!fs.existsSync(dstDir)) {
         //      fs.mkdirSync(dstDir, { recursive: true });
