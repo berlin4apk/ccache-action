@@ -58488,10 +58488,12 @@ async function configure(ccacheVariant) {
         const ccacheDir = _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput('ccache-dir');
         //  const sccacheDir = core.getInput('sccache-dir');
         const maxSize = _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput('max-size');
+        const compression_level = _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput('compression-level');
         if (ccacheVariant === "ccache") {
             //await execBash(`ccache --set-config=cache_dir='${path.join(ghWorkSpace, '.ccache')}'`);
             await execBash(`ccache --set-config=cache_dir='${path__WEBPACK_IMPORTED_MODULE_3___default().join(ccacheDir)}'`);
             await execBash(`ccache --set-config=max_size='${maxSize}'`);
+            await execBash(`ccache --set-config=compression_level='${compression_level}'`);
             await execBash(`ccache --set-config=compression=true`);
             _actions_core__WEBPACK_IMPORTED_MODULE_4__.info("Cccache config:");
             await execBash("ccache -p");
