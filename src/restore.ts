@@ -9,8 +9,8 @@ import * as process from "process";
 import * as cache from "@actions/cache";
 
 export enum Inputs {
-    VariantInstallFromGithub = "install-from-github", // Input for cache, restore action
-    DontDoConfig = "dont-do-config" // Input for cache, restore action
+  VariantInstallFromGithub = 'install-from-github', // Input for cache, restore action
+  DontDoConfig = 'dont-do-config' // Input for cache, restore action
 }
 
 export function utilsGetInputAsBool(
@@ -277,11 +277,11 @@ async function installSccacheWindows() : Promise<void> {
 }
 
 async function execBash(cmd : string) {
-  await exec.exec("bash", ["-xc", cmd]);
+  await exec.exec('bash', ['-xc', cmd])
 }
 
 async function execBashSudo(cmd : string) {
-  await execBash("$(which sudo) " + cmd);
+  await execBash(`$(which sudo) ${  cmd}`)
 }
 
 async function installCcacheFromGitHub(version : string, artifactName : string, artifactType : string, binSha256 : string, binDir : string, binName : string) : Promise<void> {
@@ -352,13 +352,18 @@ async function installSccacheFromGitHub(version : string, artifactName : string,
 //  }
 //}
 
-async function downloadAndExtract (url : string, srcFile : string, dstFile : string, binSha256 : string) {
-//    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), ""));
+async function downloadAndExtract(
+  url: string,
+  srcFile: string,
+  dstFile: string,
+  binSha256: string
+) {
+  //    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), ""));
 //    const pathsep = os.path.sep();
-    const pathsep0 = (require('node:path').sep);
-    const pathsepstr = (require('node:path').sep).toString();
+  const pathsep0 = require('node:path').sep
+  const pathsepstr = require('node:path').sep.toString()
 //    const pathsep = (`tmpfoo-XXXXXX${pathsep0}`);
-    const pathsep = (`tmpfoo-XXXXXX${pathsep0}`).toString();
+  const pathsep = `tmpfoo-XXXXXX${pathsep0}`.toString()
 //    const pathseptmpfoo = ("tmpfoo-XXXXXX" + pathsep0).toString();
 //    const pathseptmpfoo = ("tmpfoo-XXXXXX" + pathsep0).toString();    
 
@@ -385,21 +390,25 @@ async function downloadAndExtract (url : string, srcFile : string, dstFile : str
 //    tmpdirname: `${os.tmpdir()}${pathsep}picturama${pathsep}`,
 //    const tmpdirname = os.tmpdir() + '/knex-test-';
 // working but no template    const tmpdirname = (path.join(os.tmpdir() + `${pathsepstr}knex-test-`));
-   const tmpdirname = fs.mkdtempSync(path.join(os.tmpdir(), `${pathsepstr}knex-test-`));
+  const tmpdirname = fs.mkdtempSync(
+    path.join(os.tmpdir(), `${pathsepstr}knex-test-`)
+  )
 //    const tmpdirname = (path.join(os.tmpdir(), `${pathsepstr}knex-test-`));
-          fs.mkdirSync(tmpdirname, { recursive: true });
+  fs.mkdirSync(tmpdirname, {recursive: true})
 //    const tmpdirname3 = fs.mkdtempSync(path.join(os.tmpdir(), `XXXXXX${pathsep}`));
 //    const tmpdirname4 = fs.mkdtempSync(path.join(os.tmpdir(), `${pathsep}`));
 //        console.log(`console.log: tmpdirname ${tmpdirname} ### tmpdirname2 ${tmpdirname2}.### tmpdirname3 ${tmpdirname3}.### tmpdirname4 ${tmpdirname4}.###  `);
-        console.log(`console.log: tmpdirname ${tmpdirname}  `);
+  console.log(`console.log: tmpdirname ${tmpdirname}  `)
 //        core.info(`core.info: tmpdirname ${tmpdirname} ### tmpdirname2 ${tmpdirname2}.### tmpdirname3 ${tmpdirname3}.### tmpdirname4 ${tmpdirname4}.###  `);
 //    if (!fs.existsSync(tmpdirname)) {
       fs.mkdirSync(tmpdirname, { recursive: true });
-  if (url.endsWith(".zip")) {
-    const zipName = path.join(tmpdirname, "dl.zip");
-    await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" `);
+  if (url.endsWith('.zip')) {
+    const zipName = path.join(tmpdirname, 'dl.zip')
+    await execBash(
+      `$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" `
+    )
     await execBash(` unzip -j -C -d "${tmpdirname}" "${zipName}" `);
-  } else if (url.endsWith(".tar.xz")) {
+  } else if (url.endsWith('.tar.xz')) {
 ////    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xJf - -O --wildcards '${srcFile}' > '${dstFile}'`);
 ////    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), ""));
 //    const tmpdirname = fs.mkdtempSync(path.join(os.tmpdir(), "tmp-"));
@@ -407,9 +416,16 @@ async function downloadAndExtract (url : string, srcFile : string, dstFile : str
 //      fs.mkdirSync(tmpdirname, { recursive: true });
 ////    }
 //    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xJvf - -C '${tmpdirname}/' --strip-components=1 '${srcFile}'`);
-    const zipName = path.join(tmpdirname, "dl.tar.xz");
-    await execBash(` $(command -v curl -v --show-error -L || command -v wget -S ) -O "${zipName}"  "${url}"  `);
-    await execBash(` $(command -v gtar || command -v tar) -C "${tmpdirname}" --strip-components=1 -xJvf "${zipName}" `);
+    const zipName = path.join(tmpdirname, 'dl.tar.xz')
+    await execBash(
+      
+      ` $(command -v curl -v --show-error -L || command -v wget -S ) -O "${zipName}"  "${url}"  `
+    )
+    await execBash(
+      
+      
+      ` $(command -v gtar || command -v tar) -C "${tmpdirname}" --strip-components=1 -xJvf "${zipName}" `
+    )
     //await execBash(`$(command -v curl -vvv -L --output - || command -v wget -O- ) '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xJvf - `);
 //    const dstDir = path.dirname(dstFile);
 //    if (!fs.existsSync(dstDir)) {
@@ -427,9 +443,13 @@ async function downloadAndExtract (url : string, srcFile : string, dstFile : str
 //      fs.mkdirSync(tmpdirname, { recursive: true });
 ////    }
 //    await execBash(`curl -L '${url}' | $(command -v gtar || command -v tar) xzvf - -C '${tmpdirname}/' --strip-components=1 '${srcFile}'`);
-    const zipName = path.join(tmpdirname, "dl.tar.gz");
-    await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" `);
-    await execBash(`$(command -v gtar || command -v tar) -C "${tmpdirname}" --strip-components=1 -xzvf "${zipName}" `);
+    const zipName = path.join(tmpdirname, 'dl.tar.gz')
+    await execBash(
+      `$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" `
+    )
+    await execBash(
+      `$(command -v gtar || command -v tar) -C "${tmpdirname}" --strip-components=1 -xzvf "${zipName}" `
+    )
     //await execBash(`$(command -v curl -vvv -L --output - || command -v wget -O- ) '${url}' | $(command -v gtar || command -v tar) -C '${tmpdirname}' --strip-components=1 -xzvf - `);
 //    const dstDir = path.dirname(dstFile);
 //    if (!fs.existsSync(dstDir)) {
@@ -485,7 +505,7 @@ async function runInner() : Promise<void> {
     core.endGroup();
   }
 
-  core.startGroup("Restore cache");
+  core.startGroup('Restore cache')
   await restore(ccacheVariant);
   core.endGroup();
 
