@@ -88,6 +88,17 @@ async function configure(ccacheVariant : string) : Promise<void> {
     await execBash(`ccache --set-config=compression=true`);
     core.info("Cccache config:");
     await execBash("ccache -p");
+	  
+    await execBash("[ -d /usr/local/lib/ccache/ ] && ls -latr /usr/local/lib/ccache/ ");
+    await execBash("[ -d /usr/lib64/ccache/ ] && ls -latr /usr/lib64/ccache/ ");
+    await execBash("[ -d /usr/lib/ccache/ ] && ls -latr /usr/lib/ccache/ ");
+    await execBashSudo("set -vx ; update-ccache-symlinks.sh");
+    await execBash("[ -d /usr/local/lib/ccache/ ] && ls -latr /usr/local/lib/ccache/ ");
+    await execBash("[ -d /usr/lib64/ccache/ ] && ls -latr /usr/lib64/ccache/ ");
+    await execBash("[ -d /usr/lib/ccache/ ] && ls -latr /usr/lib/ccache/ ");
+ 
+
+	  
   } else {
     const options = `SCCACHE_IDLE_TIMEOUT=0 SCCACHE_DIR='${ghWorkSpace}'/.sccache SCCACHE_CACHE_SIZE='${maxSize}'`;
     // const options = `SCCACHE_IDLE_TIMEOUT=0 SCCACHE_DIR='${sccacheDir}' SCCACHE_CACHE_SIZE='${maxSize}'`;
