@@ -61930,7 +61930,7 @@ async function downloadAndExtract(url, srcFile, dstFile, binSha256) {
     fs__WEBPACK_IMPORTED_MODULE_1___default().mkdirSync(tmpdirname, { recursive: true });
     if (url.endsWith(".zip")) {
         const zipName = path__WEBPACK_IMPORTED_MODULE_3___default().join(tmpdirname, "dl.zip");
-        await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -O "${zipName}"  "${url}" `);
+        await execBash(`$(command -v curl -v --show-error -L  || command -v wget -S ) -v --show-error -L -J -O "${zipName}"  "${url}" `);
         await execBash(` unzip -j -C -d "${tmpdirname}" "${zipName}" `);
     }
     else if (url.endsWith(".tar.xz")) {
