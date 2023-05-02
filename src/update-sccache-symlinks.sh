@@ -309,6 +309,7 @@ source ~/.bashrc && echo "$PATH"
 ### not work with sccache ### [ -d /usr/local/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s -v /usr/local/lib/sccache/* . ||:
 ### not work with sccache ### [ -d /usr/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s -v /usr/lib/sccache/* . ||:
 
+set -x
 echo "int x = 1;" > /tmp/test.c
 echo "int x = $RANDOM;" > /tmp/test-RANDOM.c
 _has_command ccache && {
