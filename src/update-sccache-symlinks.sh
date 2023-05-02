@@ -34,7 +34,7 @@ _has_command() {
 export "$(dpkg-architecture)"
 export -p | grep -i deb
 
-export DEBUG=1
+### export DEBUG=1
 
 # PN=$(dirname "$0")
 
