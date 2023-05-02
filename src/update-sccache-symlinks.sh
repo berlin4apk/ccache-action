@@ -95,9 +95,10 @@ set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 
 # debug
-PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
-PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
-PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+#PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+#PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+#PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 
 ### PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
@@ -136,9 +137,10 @@ set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
-PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
-PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
-PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+#PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+#PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+#PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 
 ### PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
@@ -146,6 +148,9 @@ PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 
 ## str=$(printf '%s' "$str" | sed -e 's@/@a@g')
 echo "\$PATH"
+echo "delete any instances in the middle"
+echo "delete any instance at the beginning"
+echo "delete any instance in the at the end"
 PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@:\$SCCACHE_WRAPPER_BINDIR@@g' )"
 ## PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 ## PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
@@ -185,9 +190,10 @@ set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 
 # debug
-PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
-PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
-PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+#PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+#PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+#PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 
 ### PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
@@ -212,9 +218,10 @@ set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
-PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
-PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
-PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+#PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+#PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+#PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 
 ### PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
