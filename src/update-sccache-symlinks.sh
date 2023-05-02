@@ -7,7 +7,7 @@ unset DEBUG=
 unset DEBUGwrapper=
 ### export DEBUGwrapper=1
 
-export teeDEVNULL="\|grep -q \"\""
+export teeDEVNULL="-- |grep -q \"\""
 [ "$DEBUG" != "" ] && unset teeDEVNULL=
 
 [ "$DEBUG" != "" ] && set -vx
