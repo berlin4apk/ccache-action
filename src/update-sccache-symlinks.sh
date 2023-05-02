@@ -181,7 +181,7 @@ cat > "./${COMPILER}" <<-EndofScript
 ### #!/bin/sh
 [ "$DEBUGwrapper" != "" ] && set -vx
 [ "$DEBUGx" != "" ] && set -x
-SCCACHE_WRAPPER_BINDIR="\$(dirname "\$0")"  # Intentionally don't resolve symlinks
+SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
 [ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -267,7 +267,7 @@ cat > "./${COMPILER}" <<-EndofScript
 ### #!/bin/sh
 [ "$DEBUGwrapper" != "" ] && set -vx
 [ "$DEBUGx" != "" ] && set -x
-SCCACHE_WRAPPER_BINDIR="\$(dirname "\$0")"  # Intentionally don't resolve symlinks
+SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
 [ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
