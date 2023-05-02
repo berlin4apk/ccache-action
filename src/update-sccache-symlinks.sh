@@ -89,6 +89,7 @@ _has_command fffbash && {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/bash || command -v bash )
 ### #!/bin/bash
+set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
@@ -114,6 +115,7 @@ _has_command fffbash || {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/sh || command -v sh )
 ### #!/bin/sh
+set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 ## str=$(printf '%s' "$str" | sed -e 's@/@a@g')
 PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@:\$SCCACHE_WRAPPER_BINDIR@@g' )"
