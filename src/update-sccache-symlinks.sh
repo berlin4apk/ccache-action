@@ -2,11 +2,13 @@
 
 set -xv
 
-# apt update && apt install curl build-essential nvi git
+# apt update && apt install curl build-essential nvi git shellcheck
 # rm -fr /usr/local/lib/sccache /usr/lib/sccache /usr/local/bin/*  /update-sccache-symlinks.sh
 # git clone https://github.com/berlin4apk/ccache-action.git --branch dev
 # git -C ccache-action pull ; cp ccache-action/src/update-sccache-symlinks.sh /
-
+####
+# rm -fr /usr/local/lib/sccache /usr/lib/sccache /usr/local/bin/* ; git -C ccache-action pull ; cp ccache-action/src/update-sccache-symlinks.sh /
+# bash ./update-sccache-symlinks.sh
 
 _has_command() {
   # well, this is exactly `for cmd in "$@"; do`
@@ -123,17 +125,15 @@ ls -latr /usr/lib/sccache/ /usr/local/lib/sccache/ /usr/local/bin/ ||:
 
 # Prepend ccache into the PATH
 # shellcheck disable=SC2016
-echo '[ -d /usr/local/lib/ccache/ ] && export PATH="/usr/local/lib/ccache:$PATH"' | tee -a ~/.bashrc
+echo '[ -d /usr/local/lib/sccache/ ] && export PATH="/usr/local/lib/sccache:$PATH"' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
 echo '[ -d /usr/lib64/sccache/ ] && export PATH="/usr/lib64/sccache:$PATH"' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
 echo '[ -d /usr/lib/sccache/ ] && export PATH="/usr/lib/sccache:$PATH"' | tee -a ~/.bashrc
-# shellcheck disable=SC2016
-echo '[ -d /usr/local/lib/sccache/ ] && export PATH="/usr/local/lib/sccache:$PATH"' | tee -a ~/.bashrc
 # Source bashrc to test the new PATH
 # shellcheck disable=SC1090
 source ~/.bashrc && echo "$PATH"
 
 cd /usr/local/bin && $Sudo ln -s /usr/local/lib/sccache/* .
 #for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/bin/ccache /usr/local/bin/$t; done
-for t in gcc g++ cc c++ clang clang++; do $Sudo ln -vs /usr/local/bin/sccache /usr/local/bin/$t; done
+##for t in gcc g++ cc c++ clang clang++; do $Sudo ln -vs /usr/local/bin/sccache /usr/local/bin/$t; done
