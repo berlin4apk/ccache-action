@@ -4,6 +4,7 @@ set -xv
 
 # docker run --rm -it ubuntu:22.04
 # apt update && apt install --yes curl build-essential nvi git shellcheck ash apt-file file busybox
+# export CI="true"
 # rm -fr /usr/local/lib/sccache /usr/lib/sccache /usr/local/bin/*  /update-sccache-symlinks.sh
 # git clone https://github.com/berlin4apk/ccache-action.git --branch dev
 # git -C ccache-action pull ; cp ccache-action/src/update-sccache-symlinks.sh /
@@ -291,7 +292,7 @@ ls -latr /usr/lib/sccache/ /usr/local/lib/sccache/ /usr/local/bin/ ||:
 
 # Prepend ccache into the PATH
 # shellcheck disable=SC2016
-grep -q /usr/local/lib/sccache ~/.bashrc || echo '[ -d /usr/local/lib/sccache/ ] && export PATH="/usr/local/lib/sccache:$PATH"' | tee -a ~/.bashrc
+grep -q /usr/local/lib/sccache ~/.bashrc || echo '[ -d /usr/local/lib/sccache/ ] && echo $PATH | grep -vq /usr/local/lib/sccache && export PATH="/usr/local/lib/sccache:$PATH"' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
 # DISABELD FOR sccache ### echo '[ -d /usr/lib64/sccache/ ] && export PATH="/usr/lib64/sccache:$PATH"' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
