@@ -287,8 +287,8 @@ echo '[ -d /usr/lib/sccache/ ] && export PATH="/usr/lib/sccache:$PATH"' | tee -a
 source ~/.bashrc && echo "$PATH"
 
 # cd /usr/local/bin && $Sudo ln -s /usr/local/lib/sccache/* .
-[ -d /usr/local/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s -v /usr/local/lib/sccache/* .
-[ -d /usr/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s -v /usr/lib/sccache/* .
+[ -d /usr/local/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s -v /usr/local/lib/sccache/* . ||:
+[ -d /usr/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s -v /usr/lib/sccache/* . ||:
 
 #for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/bin/ccache /usr/local/bin/$t; done
 ##for t in gcc g++ cc c++ clang clang++; do $Sudo ln -vs /usr/local/bin/sccache /usr/local/bin/$t; done
