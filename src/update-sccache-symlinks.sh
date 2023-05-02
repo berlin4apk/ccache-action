@@ -86,9 +86,10 @@ Endofmessage
 echo "\\${SCCACHE_BIN} \\${COMPILER} \"$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "\\${SCCACHE_BIN} \\${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "\\${SCCACHE_BIN} \\${COMPILER} \"\$\@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+echo "EndofScript" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "chmod 755 \"./\${COMPILER}\" " | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "done" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
-echo "EndofScript" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+
 
 
 $Sudo chmod 755 /usr/lib/sccache/sccache-wrapper || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper
