@@ -74,6 +74,9 @@ PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the 
 \${SCCACHE_BIN} \${COMPILER} "\\$\\@"
 \${SCCACHE_BIN} \${COMPILER} "\$\@"
 \${SCCACHE_BIN} \${COMPILER} "\$@"
+\${SCCACHE_BIN} \${COMPILER} '$@'
+\${SCCACHE_BIN} \${COMPILER} '\$@'
+\${SCCACHE_BIN} \${COMPILER} '\$\@'
 EOF
 chmod 755 "./\${COMPILER}"
 done
