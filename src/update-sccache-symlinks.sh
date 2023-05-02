@@ -3,7 +3,7 @@
 set -xv
 
 # docker run --rm -it ubuntu:22.04
-# apt update && apt install curl build-essential nvi git shellcheck ash apt-file file busybox
+# apt update && apt install --yes curl build-essential nvi git shellcheck ash apt-file file busybox
 # rm -fr /usr/local/lib/sccache /usr/lib/sccache /usr/local/bin/*  /update-sccache-symlinks.sh
 # git clone https://github.com/berlin4apk/ccache-action.git --branch dev
 # git -C ccache-action pull ; cp ccache-action/src/update-sccache-symlinks.sh /
@@ -291,11 +291,11 @@ ls -latr /usr/lib/sccache/ /usr/local/lib/sccache/ /usr/local/bin/ ||:
 
 # Prepend ccache into the PATH
 # shellcheck disable=SC2016
-echo '[ -d /usr/local/lib/sccache/ ] && export PATH="/usr/local/lib/sccache:$PATH"' | tee -a ~/.bashrc
+grep -q /usr/local/lib/sccache ~/.bashrc || echo '[ -d /usr/local/lib/sccache/ ] && export PATH="/usr/local/lib/sccache:$PATH"' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
-echo '[ -d /usr/lib64/sccache/ ] && export PATH="/usr/lib64/sccache:$PATH"' | tee -a ~/.bashrc
+# DISABELD FOR sccache ### echo '[ -d /usr/lib64/sccache/ ] && export PATH="/usr/lib64/sccache:$PATH"' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
-echo '[ -d /usr/lib/sccache/ ] && export PATH="/usr/lib/sccache:$PATH"' | tee -a ~/.bashrc
+# DISABELD FOR sccache ### echo '[ -d /usr/lib/sccache/ ] && export PATH="/usr/lib/sccache:$PATH"' | tee -a ~/.bashrc
 # Source bashrc to test the new PATH
 # shellcheck disable=SC1090
 source ~/.bashrc && echo "$PATH"
@@ -304,10 +304,18 @@ source ~/.bashrc && echo "$PATH"
 ### not work with sccache ### [ -d /usr/local/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s -v /usr/local/lib/sccache/* . ||:
 ### not work with sccache ### [ -d /usr/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s -v /usr/lib/sccache/* . ||:
 
-echo "int x = $RANDOM;" > /tmp/test.c
+echo "int x = 1;" > /tmp/test.c
+echo "int x = $RANDOM;" > /tmp/test-RANDOM.c
 ccache gcc /tmp/test.c -c -o /tmp/test.o ||:
+ccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o ||:
 sccache --show-stats ||:
 sccache gcc /tmp/test.c -c -o /tmp/test.o ||:
+sccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o ||:
+ccache --show-stats ||:
+sccache --show-stats ||:
+gcc /tmp/test.c -c -o /tmp/test.o
+gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
+ccache --show-stats ||:
 sccache --show-stats ||:
 
 #for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/bin/ccache /usr/local/bin/$t; done
