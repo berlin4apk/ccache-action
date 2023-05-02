@@ -44,6 +44,20 @@ export -p | grep -i deb
 # $Sudo "$PN"/update-ccache-symlinks.pl
 
 
+if [ "$CI" != "true" ]; then
+	echo runing not in CI, no apt install
+else
+_has_command sccache || {
+	echo runing in CI, missing sccache, no install sccache to /usr/local/bin/
+	###curl -L https://github.com/ccache/ccache/releases/download/v4.8/ccache-4.8-linux-x86_64.tar.xz | $Sudo tar -xJvf- --strip-components=1 -C /usr/local/bin/
+[[ -e sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz ]] || curl -LORJ https://github.com/mozilla/sccache/releases/download/v0.4.2/sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz
+[[ -e sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz.sha256 ]] || curl -LORJ https://github.com/mozilla/sccache/releases/download/v0.4.2/sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz.sha256
+	echo "4cf08e75c2b311424eed2768dada6056569be4ac1d4cbed980e471bf1452d12c *sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz" | sha256sum -c -
+	$Sudo tar -xzvf sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz --strip-components=1 -C /usr/local/bin/
+ }
+fi
+
+
 
           # By default, sccache will fail your build if it fails to successfully communicate with its associated server. To have sccache instead gracefully failover to the local compiler without stopping, set the environment variable SCCACHE_IGNORE_SERVER_IO_ERROR=1.
           echo build-with-SCCACHE
