@@ -53,9 +53,9 @@ EOF
 chmod 755 "./${COMPILER}"
 done
 EOF1
-$Sudo chmod 755 /usr/lib/sccache/sccache-wrapper
-$SudoE /usr/lib/sccache/sccache-wrapper
-ls -latr /usr/lib/sccache/ ||:
+$Sudo chmod 755 /usr/lib/sccache/sccache-wrapper || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper
+$SudoE /usr/lib/sccache/sccache-wrapper || $SudoE /usr/local/lib/sccache/sccache-wrapper
+ls -latr /usr/lib/sccache/ /usr/local/lib/sccache/ ||:
 
 
 # Prepend ccache into the PATH
