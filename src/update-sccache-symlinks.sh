@@ -89,6 +89,7 @@ PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the 
 \${SCCACHE_BIN} \${COMPILER} '\$@'
 \${SCCACHE_BIN} \${COMPILER} '\$\100'
 Endofmessage
+echo "# foo" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 #echo "\\${SCCACHE_BIN} \\${COMPILER} \"$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "\${SCCACHE_BIN} \${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo '\${SCCACHE_BIN} \${COMPILER} \"\$@\"' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
