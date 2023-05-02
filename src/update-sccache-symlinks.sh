@@ -5,8 +5,8 @@ set -xv
 # apt update && apt install curl build-essential nvi git
 # rm -fr /usr/local/lib/sccache /usr/lib/sccache /usr/local/bin/*  /update-sccache-symlinks.sh
 # git clone https://github.com/berlin4apk/ccache-action.git --branch dev
-# $( cd ccache-action/ && git pull)
-# cp ccache-action/src/update-sccache-symlinks.sh /
+# git -C ccache-action pull ; cp ccache-action/src/update-sccache-symlinks.sh /
+
 
 _has_command() {
   # well, this is exactly `for cmd in "$@"; do`
@@ -91,6 +91,7 @@ PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the 
 Endofmessage
 #echo "\\${SCCACHE_BIN} \\${COMPILER} \"$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "\${SCCACHE_BIN} \${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+echo '\${SCCACHE_BIN} \${COMPILER} \"\$@\"' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "\\${SCCACHE_BIN} \\${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 #echo "\\${SCCACHE_BIN} \\${COMPILER} \"\$\@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "EndofScript" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
