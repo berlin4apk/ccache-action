@@ -87,7 +87,7 @@ for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rust
 set -vx
 _has_command fffbash && {
 cat > "./${COMPILER}" <<-EndofScript
-#!$(command -v bash )
+#!$(command -v /bin/bash || command -v bash )
 ### #!/bin/bash
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
@@ -112,7 +112,7 @@ EndofScript
 }
 _has_command fffbash || {
 cat > "./${COMPILER}" <<-EndofScript
-#!$(command -v sh )
+#!$(command -v /bin/sh || command -v sh )
 ### #!/bin/sh
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 ## str=$(printf '%s' "$str" | sed -e 's@/@a@g')
