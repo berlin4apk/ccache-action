@@ -128,7 +128,7 @@ _has_command() {
 SCCACHE_BIN="$(command -v sccache || echo sccache )"
 DIRNAME=$(dirname "$0")
 #cd "\$(dirname "\$PWD\$0")"
-cd "$DIRNAME"
+cd "$DIRNAME" || exit 23
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 #cat > "./\${COMPILER}" <<-EndofScript
 [ "$DEBUGwrapper" != "" ] && set -vx
@@ -138,7 +138,7 @@ cat > "./${COMPILER}" <<-EndofScript
 ### #!/bin/bash
 [ "$DEBUGwrapper" != "" ] && set -vx
 [ "$DEBUGx" != "" ] && set -x
-SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
+SCCACHE_WRAPPER_BINDIR="\$(dirname "\${BASH_SOURCE[0]}")"  # Intentionally don't resolve symlinks
 
 # debug
 [ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -181,7 +181,7 @@ cat > "./${COMPILER}" <<-EndofScript
 ### #!/bin/sh
 [ "$DEBUGwrapper" != "" ] && set -vx
 [ "$DEBUGx" != "" ] && set -x
-SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
+SCCACHE_WRAPPER_BINDIR="\$(dirname "\$0")"  # Intentionally don't resolve symlinks
 
 # debug
 [ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -227,7 +227,7 @@ _has_command() {
 SCCACHE_BIN="$(command -v sccache || echo sccache )"
 DIRNAME=$(dirname "$0")
 #cd "\$(dirname "\$PWD\$0")"
-cd "$DIRNAME"
+cd "$DIRNAME" || exit 23
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 #cat > "./\${COMPILER}" <<-EndofScript
 [ "$DEBUGwrapper" != "" ] && set -vx
@@ -238,7 +238,7 @@ cat > "./${COMPILER}" <<-EndofScript
 ### #!/bin/bash
 [ "$DEBUGwrapper" != "" ] && set -vx
 [ "$DEBUGx" != "" ] && set -x
-SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
+SCCACHE_WRAPPER_BINDIR="\$(dirname "\${BASH_SOURCE[0]}")"  # Intentionally don't resolve symlinks
 
 # debug
 [ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -267,7 +267,7 @@ cat > "./${COMPILER}" <<-EndofScript
 ### #!/bin/sh
 [ "$DEBUGwrapper" != "" ] && set -vx
 [ "$DEBUGx" != "" ] && set -x
-SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
+SCCACHE_WRAPPER_BINDIR="\$(dirname "\$0")"  # Intentionally don't resolve symlinks
 
 # debug
 [ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
