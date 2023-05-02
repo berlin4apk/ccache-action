@@ -50,7 +50,7 @@ PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the 
 # /usr/bin/sccache \${COMPILER} "\$@"
 \${SCCACHE_BIN} \${COMPILER} "\\$@"
 EOF
-chmod 755 "./${COMPILER}"
+chmod 755 "./\${COMPILER}"
 done
 EOF1
 $Sudo chmod 755 /usr/lib/sccache/sccache-wrapper || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper
