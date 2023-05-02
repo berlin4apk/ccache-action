@@ -81,25 +81,25 @@ PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the mi
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
 # /usr/bin/sccache \${COMPILER} "\$@"
-\${SCCACHE_BIN} \${COMPILER} "$@"
-\${SCCACHE_BIN} \${COMPILER} "\\$\\@"
-\${SCCACHE_BIN} \${COMPILER} "\$\@"
-\${SCCACHE_BIN} \${COMPILER} "\$@"
-\${SCCACHE_BIN} \${COMPILER} '$@'
-\${SCCACHE_BIN} \${COMPILER} '$\@'
-\${SCCACHE_BIN} \${COMPILER} '\$@'
-\${SCCACHE_BIN} \${COMPILER} '\$\@'
-\${SCCACHE_BIN} \${COMPILER} '$@'
-\${SCCACHE_BIN} \${COMPILER} '$\100'
-\${SCCACHE_BIN} \${COMPILER} '\$@'
-\${SCCACHE_BIN} \${COMPILER} '\$\100'
+1 \${SCCACHE_BIN} \${COMPILER} "$@"
+2 \${SCCACHE_BIN} \${COMPILER} "\\$\\@"
+3 \${SCCACHE_BIN} \${COMPILER} "\$\@"
+4 \${SCCACHE_BIN} \${COMPILER} "\$@"
+5 \${SCCACHE_BIN} \${COMPILER} '$@'
+6 \${SCCACHE_BIN} \${COMPILER} '$\@'
+7 \${SCCACHE_BIN} \${COMPILER} '\$@'
+8 \${SCCACHE_BIN} \${COMPILER} '\$\@'
+9 \${SCCACHE_BIN} \${COMPILER} '$@'0
+10 \${SCCACHE_BIN} \${COMPILER} '$\100'
+11 \${SCCACHE_BIN} \${COMPILER} '\$@'
+12 \${SCCACHE_BIN} \${COMPILER} '\$\100'
 Endofmessage
 echo "# foo" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 #echo "\\${SCCACHE_BIN} \\${COMPILER} \"$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
-echo "\${SCCACHE_BIN} \${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
-echo '\${SCCACHE_BIN} \${COMPILER} \"\$@\"' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
-echo '\${SCCACHE_BIN} \${COMPILER} \"$@\"' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
-printf '\${SCCACHE_BIN} \${COMPILER} \"$@\"\n' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+echo "13 \${SCCACHE_BIN} \${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+echo '14 \${SCCACHE_BIN} \${COMPILER} \"\$@\"' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+echo '15 \${SCCACHE_BIN} \${COMPILER} \"$@\"' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+printf '16 \${SCCACHE_BIN} \${COMPILER} \"$@\"\n' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 #echo "\${SCCACHE_BIN} \${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 #echo "\\${SCCACHE_BIN} \\${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 #echo "\\${SCCACHE_BIN} \\${COMPILER} \"\$\@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
