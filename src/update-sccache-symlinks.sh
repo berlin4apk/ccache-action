@@ -7,7 +7,7 @@ unset DEBUG=
 unset DEBUGwrapper=
 ### export DEBUGwrapper=1
 
-export teeDEVNULL='| grep -q ""'
+export teeDEVNULL="\|grep -q \"\""
 [ "$DEBUG" != "" ] && unset teeDEVNULL=
 
 [ "$DEBUG" != "" ] && set -vx
@@ -297,7 +297,9 @@ $Sudo chmod 755 /usr/lib/sccache/sccache-wrapper-sh || $Sudo chmod 755 /usr/loca
 #[ -d /usr/local/lib/sccache/ ] && cd /usr/local/lib/sccache/ && $SudoE sccache-wrapper
 [ -d /usr/local/lib/sccache/ ] && $SudoE /usr/local/lib/sccache/sccache-wrapper
 [ -d /usr/lib/sccache/ ] && $SudoE /usr/lib/sccache/sccache-wrapper
-ls -latr /usr/lib/sccache/ /usr/local/lib/sccache/ /usr/local/bin/ ||:
+[ -d /usr/lib/sccache/ ] && ls -latr /usr/lib/sccache/
+[ -d /usr/local/lib/sccache/ ] && ls -latr /usr/local/lib/sccache/
+[ "$DEBUG" != "" ] && [ -d /usr/local/bin/ ] && ls -latr /usr/local/bin/ 
 
 
 # Prepend ccache into the PATH
