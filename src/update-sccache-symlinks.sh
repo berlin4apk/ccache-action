@@ -67,7 +67,9 @@ cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper
 # cat <<EOF1 | $SudoE tee /usr/local/lib/sccache/sccache-wrapper
 #!/usr/bin/env bash
 SCCACHE_BIN="\$(command -v sccache || echo sccache )"
-cd "\$(dirname "\$0")"
+DIRNAME=$(dirname "$0")
+#cd "\$(dirname "\$PWD\$0")"
+cd "$DIRNAME"
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 cat > "./\${COMPILER}" <<-EndofScript
 #!/bin/bash
