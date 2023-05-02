@@ -69,9 +69,9 @@ fi
 
 
 
-          # By default, sccache will fail your build if it fails to successfully communicate with its associated server. To have sccache instead gracefully failover to the local compiler without stopping, set the environment variable SCCACHE_IGNORE_SERVER_IO_ERROR=1.
-          echo build-with-SCCACHE
-          # see https://github.com/mozilla/sccache/issues/1155#issuecomment-1097557677
+# By default, sccache will fail your build if it fails to successfully communicate with its associated server. To have sccache instead gracefully failover to the local compiler without stopping, set the environment variable SCCACHE_IGNORE_SERVER_IO_ERROR=1.
+echo build-with-SCCACHE
+# see https://github.com/mozilla/sccache/issues/1155#issuecomment-1097557677
 [ -d /usr/local/lib/sccache/ ] || $Sudo mkdir -p /usr/local/lib/sccache/
 cat <<EOF1 | $SudoE tee /usr/local/lib/sccache/sccache-wrapper2
 #!/usr/bin/env bash
@@ -115,7 +115,7 @@ DIRNAME=$(dirname "$0")
 cd "$DIRNAME"
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 #cat > "./\${COMPILER}" <<-EndofScript
-set -vx
+[ "$DEBUGwrapper" != "" ] && set -vx
 _has_command bash && {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/bash || command -v bash )
