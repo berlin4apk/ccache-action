@@ -7,7 +7,8 @@ unset DEBUG=
 unset DEBUGwrapper=
 ### export DEBUGwrapper=1
 
-export teeDEVNULL="-- |grep -q \"\""
+#export teeDEVNULL="-- |grep -q \"\""
+export grepOPT="-q"
 [ "$DEBUG" != "" ] && unset teeDEVNULL=
 
 [ "$DEBUG" != "" ] && set -vx
@@ -74,7 +75,7 @@ fi
 echo build-with-SCCACHE
 # see https://github.com/mozilla/sccache/issues/1155#issuecomment-1097557677
 [ -d /usr/local/lib/sccache/ ] || $Sudo mkdir -p /usr/local/lib/sccache/
-cat <<EOF1 | $SudoE tee /usr/local/lib/sccache/sccache-wrapper2 $teeDEVNULL
+cat <<EOF1 | $SudoE tee -- /usr/local/lib/sccache/sccache-wrapper2 | grep $grepOPT ""
 #!/usr/bin/env bash
 SCCACHE_BIN="\$(command -v sccache || echo sccache )"
 cd "\$(dirname "\$0")" || exit 2
@@ -99,7 +100,7 @@ chmod 755 "./\${COMPILER}"
 done
 EOF1
 
-cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper $teeDEVNULL
+cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper | grep $grepOPT -E "$"
 #!/bin/sh
 ### #!/usr/bin/env bash
 _has_command() {
@@ -194,7 +195,7 @@ done
 Endofmessage
 
 
-cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper-sh $teeDEVNULL
+cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper-sh | grep $grepOPT -E "$"
 #!/bin/sh
 ### #!/usr/bin/env bash
 _has_command() {
@@ -304,7 +305,7 @@ $Sudo chmod 755 /usr/lib/sccache/sccache-wrapper-sh || $Sudo chmod 755 /usr/loca
 
 # Prepend ccache into the PATH
 # shellcheck disable=SC2016
-grep -q /usr/local/lib/sccache ~/.bashrc || echo '[ -d /usr/local/lib/sccache/ ] && $( echo "$PATH" | grep -qv /usr/local/lib/sccache ) && export PATH="/usr/local/lib/sccache:$PATH" ' | tee -a ~/.bashrc $teeDEVNULL
+grep -q /usr/local/lib/sccache ~/.bashrc || echo '[ -d /usr/local/lib/sccache/ ] && $( echo "$PATH" | grep -qv /usr/local/lib/sccache ) && export PATH="/usr/local/lib/sccache:$PATH" ' | tee -a ~/.bashrc | grep $grepOPT -E "$"
 # shellcheck disable=SC2016
 # DISABELD FOR sccache ### echo '[ -d /usr/lib64/sccache/ ] && export PATH="/usr/lib64/sccache:$PATH"' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
