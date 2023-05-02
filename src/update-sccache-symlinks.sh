@@ -13,6 +13,10 @@ export DEBUG=1
 ##export DEBUGwrapper=
 export DEBUGwrapper=1
 
+#unset DEBUGtests=
+##export DEBUGtests=
+###export DEBUGtests=1
+
 #export teeDEVNULL="-- |grep -q \"\""
 #[ "$DEBUG" != "" ] && unset teeDEVNULL=
 export grepOPT="-q"
@@ -141,7 +145,7 @@ cat > "./${COMPILER}" <<-EndofScript
 SCCACHE_WRAPPER_BINDIR="\$(dirname "\${BASH_SOURCE[0]}")"  # Intentionally don't resolve symlinks
 
 # debug
-[ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+[ "$DEBUGtests" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 #PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -184,7 +188,7 @@ cat > "./${COMPILER}" <<-EndofScript
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
-[ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+[ "$DEBUGtests" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 #PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -241,7 +245,7 @@ cat > "./${COMPILER}" <<-EndofScript
 SCCACHE_WRAPPER_BINDIR="\$(dirname "\${BASH_SOURCE[0]}")"  # Intentionally don't resolve symlinks
 
 # debug
-[ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+[ "$DEBUGtests" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 #PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -270,7 +274,7 @@ cat > "./${COMPILER}" <<-EndofScript
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
-[ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+[ "$DEBUGtests" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 #PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -359,7 +363,7 @@ ccache --show-stats
 set +x
 [ "$DEBUG" != "" ] && set -vx
 [ "$DEBUGx" != "" ] && set -x
-}
+} ||:
 _has_command sccache && {
 set -x
 [ "$DEBUG" != "" ] && set -vx
@@ -371,7 +375,7 @@ sccache --show-stats
 set +x
 [ "$DEBUG" != "" ] && set -vx
 [ "$DEBUGx" != "" ] && set -x
-}
+} ||:
 
 set -x
 [ "$DEBUG" != "" ] && set -vx
@@ -389,7 +393,7 @@ set -x
 ccache --show-stats
 set +x
 [ "$DEBUGx" != "" ] && set -x
-}
+} ||:
 _has_command sccache && {
 set -x
 [ "$DEBUG" != "" ] && set -vx
@@ -397,7 +401,7 @@ set -x
 sccache --show-stats
 set +x
 [ "$DEBUGx" != "" ] && set -x
-}
+} ||:
 
 #[ command -v ccache >/dev/null 2>&1 ] && ccache gcc /tmp/test.c -c -o /tmp/test.o ||:
 #[ command -v ccache >/dev/null 2>&1 ] && ccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o ||:
