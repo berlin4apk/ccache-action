@@ -48,7 +48,7 @@ PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the mi
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
 # /usr/bin/sccache \${COMPILER} "\$@"
-\${SCCACHE_BIN} \${COMPILER} "\$@"
+\${SCCACHE_BIN} \${COMPILER} "\\$@"
 EOF
 chmod 755 "./${COMPILER}"
 done
