@@ -154,7 +154,7 @@ echo "\$PATH"
 echo "sed: delete any instances in the middle"
 echo "sed: delete any instance at the beginning"
 echo "sed: delete any instance in the at the end"
-PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@:\$SCCACHE_WRAPPER_BINDIR@@g' )"
+PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:'\$SCCACHE_WRAPPER_BINDIR':@@g' -e 's@'\$SCCACHE_WRAPPER_BINDIR':@@g' -e 's@:'\$SCCACHE_WRAPPER_BINDIR'@@g' )"
 ## PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 ## PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
 ## PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
@@ -235,7 +235,7 @@ echo "\$PATH"
 echo "sed: delete any instances in the middle"
 echo "sed: delete any instance at the beginning"
 echo "sed: delete any instance in the at the end"
-PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@:\$SCCACHE_WRAPPER_BINDIR@@g' )"
+PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:'\$SCCACHE_WRAPPER_BINDIR':@@g' -e 's@'\$SCCACHE_WRAPPER_BINDIR':@@g' -e 's@:'\$SCCACHE_WRAPPER_BINDIR'@@g' )"
 ## PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 ## PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
 ## PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
