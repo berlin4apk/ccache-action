@@ -94,8 +94,9 @@ echo "# foo" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "\${SCCACHE_BIN} \${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo '\${SCCACHE_BIN} \${COMPILER} \"\$@\"' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo '\${SCCACHE_BIN} \${COMPILER} \"$@\"' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
-echo "\${SCCACHE_BIN} \${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
-echo "\\${SCCACHE_BIN} \\${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+printf '\${SCCACHE_BIN} \${COMPILER} \"$@\"\n' | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+#echo "\${SCCACHE_BIN} \${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
+#echo "\\${SCCACHE_BIN} \\${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 #echo "\\${SCCACHE_BIN} \\${COMPILER} \"\$\@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "EndofScript" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 echo "chmod 755 \"./\${COMPILER}\" " | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
