@@ -4,7 +4,6 @@
 #unset DEBUG=
 ##export DEBUG=
 ### export DEBUG=1
-export DEBUG=1
 
 #unset DEBUGwrapper=
 ##export DEBUGwrapper=
@@ -18,7 +17,7 @@ export grepOPT="-q"
 [ "$DEBUG" != "" ] && set -vx
 #set -x
 #set -eu
-set -e
+#set -e
 
 # docker run --rm -it ubuntu:22.04
 # apt update && apt install --yes curl build-essential nvi git shellcheck ash apt-file file busybox
