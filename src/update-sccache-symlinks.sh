@@ -2,13 +2,16 @@
 
 set -xv
 
-# apt update && apt install curl build-essential nvi git shellcheck
+# docker run --rm -it ubuntu:22.04
+# apt update && apt install curl build-essential nvi git shellcheck ash apt-file file busybox
 # rm -fr /usr/local/lib/sccache /usr/lib/sccache /usr/local/bin/*  /update-sccache-symlinks.sh
 # git clone https://github.com/berlin4apk/ccache-action.git --branch dev
 # git -C ccache-action pull ; cp ccache-action/src/update-sccache-symlinks.sh /
 ####
 # rm -fr /usr/local/lib/sccache /usr/lib/sccache /usr/local/bin/* ; git -C ccache-action pull ; cp ccache-action/src/update-sccache-symlinks.sh /
 # bash ./update-sccache-symlinks.sh
+# printf '%s\n' "$PATH" | /bin/sed -e 's@:'$SCCACHE_WRAPPER_BINDIR':@@g' -e 's@'$SCCACHE_WRAPPER_BINDIR':@@g' -e 's@:'$SCCACHE_WRAPPER_BINDIR'@@g'
+# /usr/local/lib/sccache/gcc 2>&1 | grep --color=always -E "/usr/local/lib/sccache|delete any instances|$"
 
 _has_command() {
   # well, this is exactly `for cmd in "$@"; do`
@@ -262,6 +265,7 @@ Endofmessage
 
 
 $Sudo chmod 755 /usr/lib/sccache/sccache-wrapper || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper
+$Sudo chmod 755 /usr/lib/sccache/sccache-wrapper-sh || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper-sh
 #[ -d /usr/lib/sccache/ ] && cd /usr/lib/sccache/ && $SudoE sccache-wrapper
 #[ -d /usr/local/lib/sccache/ ] && cd /usr/local/lib/sccache/ && $SudoE sccache-wrapper
 [ -d /usr/local/lib/sccache/ ] && $SudoE /usr/local/lib/sccache/sccache-wrapper
