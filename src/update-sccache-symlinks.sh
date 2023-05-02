@@ -297,8 +297,10 @@ Endofmessage
 
 
 
-$Sudo chmod 755 /usr/lib/sccache/sccache-wrapper || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper
-$Sudo chmod 755 /usr/lib/sccache/sccache-wrapper-sh || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper-sh
+#$Sudo chmod 755 /usr/lib/sccache/sccache-wrapper || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper
+#$Sudo chmod 755 /usr/lib/sccache/sccache-wrapper-sh || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper-sh
+[ -f /usr/local/lib/sccache/sccache-wrapper ] && $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper*
+[ -f /usr/lib/sccache/sccache-wrapper ] && $Sudo chmod 755 /usr/lib/sccache/sccache-wrapper*
 #[ -d /usr/lib/sccache/ ] && cd /usr/lib/sccache/ && $SudoE sccache-wrapper
 #[ -d /usr/local/lib/sccache/ ] && cd /usr/local/lib/sccache/ && $SudoE sccache-wrapper
 [ -d /usr/local/lib/sccache/ ] && $SudoE /usr/local/lib/sccache/sccache-wrapper
