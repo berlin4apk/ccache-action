@@ -85,6 +85,7 @@ PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the 
 2 \${SCCACHE_BIN} \${COMPILER} "\\$\\@"
 3 \${SCCACHE_BIN} \${COMPILER} "\$\@"
 4 \${SCCACHE_BIN} \${COMPILER} "\$@"
+4a ${SCCACHE_BIN} ${COMPILER} "\$@"
 5 \${SCCACHE_BIN} \${COMPILER} '$@'
 6 \${SCCACHE_BIN} \${COMPILER} '$\@'
 7 \${SCCACHE_BIN} \${COMPILER} '\$@'
