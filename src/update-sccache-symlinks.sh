@@ -41,10 +41,10 @@ _has_command() {
   }
      _has_command sudo && {
 #    sudo -E echo 2>/dev/null && SudoE="sudo -E $SudoVAR" || SudoVAR="$SudoVAR"
-    sudo -E echo 2>/dev/null && SudoE="sudo -E $SudoVAR"
+    sudo -E echo 2>/dev/null && export SudoE="sudo -E $SudoVAR"
   }
      _has_command sudo && {
-    sudo echo 2>/dev/null && Sudo="sudo $SudoVAR" || Sudo=""
+    sudo echo 2>/dev/null && export Sudo="sudo $SudoVAR" || export Sudo=""
   }
 
 [ "$DEBUG" != "" ] && export "$(dpkg-architecture)"
