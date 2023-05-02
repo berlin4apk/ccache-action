@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 
-export DEBUG=
+unset DEBUG=
 ### export DEBUG=1
 
-export DEBUGwrapper=
+unset DEBUGwrapper=
 ### export DEBUGwrapper=1
 
 
