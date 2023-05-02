@@ -2,11 +2,12 @@
 
 
 #unset DEBUG=
-export DEBUG=
+##export DEBUG=
 ### export DEBUG=1
+export DEBUG=1
 
 #unset DEBUGwrapper=
-export DEBUGwrapper=
+##export DEBUGwrapper=
 ### export DEBUGwrapper=1
 
 #export teeDEVNULL="-- |grep -q \"\""
