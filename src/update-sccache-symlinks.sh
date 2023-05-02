@@ -10,11 +10,12 @@ export DEBUGwrapper=
 ### export DEBUGwrapper=1
 
 #export teeDEVNULL="-- |grep -q \"\""
+#[ "$DEBUG" != "" ] && unset teeDEVNULL=
 export grepOPT="-q"
-[ "$DEBUG" != "" ] && unset teeDEVNULL=
+[ "$DEBUG" != "" ] && export grepOPT=
 
 [ "$DEBUG" != "" ] && set -vx
-set -x
+#set -x
 #set -eu
 set -e
 
@@ -64,7 +65,7 @@ if [ "$CI" != "true" ]; then
 	echo runing not in CI, no apt install
 else
 _has_command sccache || {
-	echo runing in CI, missing sccache, no install sccache to /usr/local/bin/
+	echo runing in CI, missing sccache, install sccache to /usr/local/bin/
 	###curl -L https://github.com/ccache/ccache/releases/download/v4.8/ccache-4.8-linux-x86_64.tar.xz | $Sudo tar -xJvf- --strip-components=1 -C /usr/local/bin/
 [[ -e sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz ]] || curl -LORJ https://github.com/mozilla/sccache/releases/download/v0.4.2/sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz
 [[ -e sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz.sha256 ]] || curl -LORJ https://github.com/mozilla/sccache/releases/download/v0.4.2/sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz.sha256
@@ -104,7 +105,7 @@ chmod 755 "./\${COMPILER}"
 done
 EOF1
 
-cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper | grep $grepOPT -E "$"
+cat <<'Endofmessage' | $SudoE tee -- /usr/local/lib/sccache/sccache-wrapper | grep $grepOPT -E "$"
 #!/bin/sh
 ### #!/usr/bin/env bash
 _has_command() {
@@ -199,7 +200,7 @@ done
 Endofmessage
 
 
-cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper-sh | grep $grepOPT -E "$"
+cat <<'Endofmessage' | $SudoE tee -- /usr/local/lib/sccache/sccache-wrapper-sh | grep $grepOPT -E "$"
 #!/bin/sh
 ### #!/usr/bin/env bash
 _has_command() {
@@ -325,27 +326,42 @@ source ~/.bashrc && echo "$PATH"
 set -x
 echo "int x = 1;" > /tmp/test.c
 echo "int x = $RANDOM;" > /tmp/test-RANDOM.c
+set +x
+[ "$DEBUG" != "" ] && set -vx
 _has_command ccache && {
+set -x
 ccache --show-stats
 ccache gcc /tmp/test.c -c -o /tmp/test.o
 ccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
 ccache --show-stats
+set +x
+[ "$DEBUG" != "" ] && set -vx
 }
 _has_command sccache && {
+set -x
 sccache --show-stats
 sccache /usr/bin/gcc /tmp/test.c -c -o /tmp/test.o
 sccache /usr/bin/gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
 sccache --show-stats
+set +x
+[ "$DEBUG" != "" ] && set -vx
 }
 
+set -x
 gcc /tmp/test.c -c -o /tmp/test.o
 gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
+set +x
+[ "$DEBUG" != "" ] && set -vx
 
 _has_command ccache && {
+set -x
 ccache --show-stats
+set +x
 }
 _has_command sccache && {
+set -x
 sccache --show-stats
+set +x
 }
 
 #[ command -v ccache >/dev/null 2>&1 ] && ccache gcc /tmp/test.c -c -o /tmp/test.o ||:
