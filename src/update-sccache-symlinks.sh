@@ -11,7 +11,7 @@ export teeDEVNULL="> /dev/null"
 [ "$DEBUG" != "" ] && unset teeDEVNULL=
 
 [ "$DEBUG" != "" ] && set -vx
-
+set -x
 
 # docker run --rm -it ubuntu:22.04
 # apt update && apt install --yes curl build-essential nvi git shellcheck ash apt-file file busybox
