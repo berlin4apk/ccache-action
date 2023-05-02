@@ -333,6 +333,7 @@ set +x
 [ "$DEBUG" != "" ] && set -vx
 _has_command ccache && {
 set -x
+[ "$DEBUG" != "" ] && set -vx
 ccache --show-stats
 ccache gcc /tmp/test.c -c -o /tmp/test.o
 ccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
@@ -342,6 +343,7 @@ set +x
 }
 _has_command sccache && {
 set -x
+[ "$DEBUG" != "" ] && set -vx
 sccache --show-stats
 sccache /usr/bin/gcc /tmp/test.c -c -o /tmp/test.o
 sccache /usr/bin/gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
@@ -351,6 +353,7 @@ set +x
 }
 
 set -x
+[ "$DEBUG" != "" ] && set -vx
 gcc /tmp/test.c -c -o /tmp/test.o
 gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
 set +x
@@ -358,11 +361,13 @@ set +x
 
 _has_command ccache && {
 set -x
+[ "$DEBUG" != "" ] && set -vx
 ccache --show-stats
 set +x
 }
 _has_command sccache && {
 set -x
+[ "$DEBUG" != "" ] && set -vx
 sccache --show-stats
 set +x
 }
