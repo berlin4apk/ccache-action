@@ -319,8 +319,8 @@ ccache --show-stats
 }
 _has_command sccache && {
 sccache --show-stats
-sccache gcc /tmp/test.c -c -o /tmp/test.o
-sccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
+sccache /usr/bin/gcc /tmp/test.c -c -o /tmp/test.o
+sccache /usr/bin/gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
 sccache --show-stats
 }
 
