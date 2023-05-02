@@ -47,7 +47,7 @@ export -p | grep -i deb
 cat <<EOF1 | $SudoE tee /usr/local/lib/sccache/sccache-wrapper2
 #!/usr/bin/env bash
 SCCACHE_BIN="\$(command -v sccache || echo sccache )"
-cd "\$(dirname "\$0")"
+cd "\$(dirname "\$0")" || exit 2
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 cat > "./\${COMPILER}" <<-EOF
 #!/bin/bash
@@ -55,7 +55,9 @@ set -vx
 SCCACHE_WRAPPER_BINDIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)  # Intentionally don't resolve symlinks
 # SCCACHE_WRAPPER_BINDIR2="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
+echo "delete any instance at the beginning"
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
+echo "delete any instance in the at the end"
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
 # /usr/bin/sccache \${COMPILER} "\$@"
 \${SCCACHE_BIN} \${COMPILER} "$@"
@@ -68,6 +70,96 @@ done
 EOF1
 
 cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper
+#!/bin/sh
+### #!/usr/bin/env bash
+_has_command() {
+  # well, this is exactly `for cmd in "$@"; do`
+  for cmd do
+    command -v "$cmd" >/dev/null 2>&1 || return 1
+  done
+}
+
+set -vx
+SCCACHE_BIN="$(command -v sccache || echo sccache )"
+DIRNAME=$(dirname "$0")
+#cd "\$(dirname "\$PWD\$0")"
+cd "$DIRNAME"
+for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
+#cat > "./\${COMPILER}" <<-EndofScript
+set -vx
+_has_command bash && {
+cat > "./${COMPILER}" <<-EndofScript
+#!$(command -v /bin/bash || command -v bash )
+### #!/bin/bash
+set -vx
+SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
+
+# debug
+PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+
+PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
+#PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
+#PATH="$PATH/usrfoo:/usr/local/lib/sccache"
+
+echo "\$PATH"
+echo "delete any instances in the middle"
+PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
+echo "delete any instance at the beginning"
+PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
+echo "delete any instance in the at the end"
+PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
+echo "\$PATH"
+# /usr/bin/sccache \${COMPILER} "\$@"
+# 1 \${SCCACHE_BIN} \${COMPILER} "$@"
+# 2 \${SCCACHE_BIN} \${COMPILER} "\\$\\@"
+# 3 \${SCCACHE_BIN} \${COMPILER} "\$\@"
+# 4 \${SCCACHE_BIN} \${COMPILER} "\$@"
+# 4a ${SCCACHE_BIN} ${COMPILER} "\$@"
+${SCCACHE_BIN} ${COMPILER} "\$@"
+# 5 \${SCCACHE_BIN} \${COMPILER} '$@'
+# 6 \${SCCACHE_BIN} \${COMPILER} '$\@'
+# 7 \${SCCACHE_BIN} \${COMPILER} '\$@'
+# 8 \${SCCACHE_BIN} \${COMPILER} '\$\@'
+# 9 \${SCCACHE_BIN} \${COMPILER} '$@'0
+# 10 \${SCCACHE_BIN} \${COMPILER} '$\100'
+# 11 \${SCCACHE_BIN} \${COMPILER} '\$@'
+# 12 \${SCCACHE_BIN} \${COMPILER} '\$\100'
+EndofScript
+}
+_has_command bash || {
+cat > "./${COMPILER}" <<-EndofScript
+#!$(command -v /bin/sh || command -v sh )
+### #!/bin/sh
+set -vx
+SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
+
+# debug
+PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
+PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+
+PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
+#PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
+#PATH="$PATH/usrfoo:/usr/local/lib/sccache"
+
+## str=$(printf '%s' "$str" | sed -e 's@/@a@g')
+echo "\$PATH"
+PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@:\$SCCACHE_WRAPPER_BINDIR@@g' )"
+## PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
+## PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
+## PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
+echo "\$PATH"
+${SCCACHE_BIN} ${COMPILER} "\$@"
+EndofScript
+}
+chmod 755 ./${COMPILER}
+done
+Endofmessage
+
+
+cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper-sh
 #!/bin/sh
 ### #!/usr/bin/env bash
 _has_command() {
@@ -101,25 +193,15 @@ PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
-
+echo "\$PATH"
+echo "delete any instances in the middle"
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
+echo "delete any instance at the beginning"
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
+echo "delete any instance in the at the end"
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
-# /usr/bin/sccache \${COMPILER} "\$@"
-# 1 \${SCCACHE_BIN} \${COMPILER} "$@"
-# 2 \${SCCACHE_BIN} \${COMPILER} "\\$\\@"
-# 3 \${SCCACHE_BIN} \${COMPILER} "\$\@"
-# 4 \${SCCACHE_BIN} \${COMPILER} "\$@"
-# 4a ${SCCACHE_BIN} ${COMPILER} "\$@"
+echo "\$PATH"
 ${SCCACHE_BIN} ${COMPILER} "\$@"
-# 5 \${SCCACHE_BIN} \${COMPILER} '$@'
-# 6 \${SCCACHE_BIN} \${COMPILER} '$\@'
-# 7 \${SCCACHE_BIN} \${COMPILER} '\$@'
-# 8 \${SCCACHE_BIN} \${COMPILER} '\$\@'
-# 9 \${SCCACHE_BIN} \${COMPILER} '$@'0
-# 10 \${SCCACHE_BIN} \${COMPILER} '$\100'
-# 11 \${SCCACHE_BIN} \${COMPILER} '\$@'
-# 12 \${SCCACHE_BIN} \${COMPILER} '\$\100'
 EndofScript
 }
 _has_command SHELLLbash || {
@@ -139,16 +221,21 @@ PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
 ## str=$(printf '%s' "$str" | sed -e 's@/@a@g')
+echo "\$PATH"
 PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@:\$SCCACHE_WRAPPER_BINDIR@@g' )"
 ## PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 ## PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
 ## PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
+echo "\$PATH"
 ${SCCACHE_BIN} ${COMPILER} "\$@"
 EndofScript
 }
 chmod 755 ./${COMPILER}
 done
 Endofmessage
+
+
+
 #echo "# foo" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 ##echo "\\${SCCACHE_BIN} \\${COMPILER} \"$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 #echo "13 \${SCCACHE_BIN} \${COMPILER} \"\$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
