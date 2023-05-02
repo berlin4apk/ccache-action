@@ -292,7 +292,7 @@ ls -latr /usr/lib/sccache/ /usr/local/lib/sccache/ /usr/local/bin/ ||:
 
 # Prepend ccache into the PATH
 # shellcheck disable=SC2016
-grep -q /usr/local/lib/sccache ~/.bashrc || echo '[ -d /usr/local/lib/sccache/ ] && echo "$PATH" | grep -qv /usr/local/lib/sccache && export PATH="/usr/local/lib/sccache:$PATH"' | tee -a ~/.bashrc
+grep -q /usr/local/lib/sccache ~/.bashrc || echo '[ -d /usr/local/lib/sccache/ ] && $( echo "$PATH" | grep -qv /usr/local/lib/sccache && export PATH="/usr/local/lib/sccache:$PATH" )' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
 # DISABELD FOR sccache ### echo '[ -d /usr/lib64/sccache/ ] && export PATH="/usr/lib64/sccache:$PATH"' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
