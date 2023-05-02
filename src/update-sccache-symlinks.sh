@@ -5,6 +5,10 @@
 ##export DEBUG=
 ### export DEBUG=1
 
+#unset DEBUGx=
+##export DEBUGx=
+export DEBUGx=1
+
 #unset DEBUGwrapper=
 ##export DEBUGwrapper=
 ### export DEBUGwrapper=1
@@ -15,6 +19,7 @@ export grepOPT="-q"
 [ "$DEBUG" != "" ] && export grepOPT=
 
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 #set -x
 #set -eu
 #set -e
@@ -65,6 +70,7 @@ if [ "$CI" != "true" ]; then
 	echo runing not in CI, no apt install
 else
 _has_command sccache || {
+[ "$DEBUGx" != "" ] && set -x
 	echo runing in CI, missing sccache, install sccache to /usr/local/bin/
 	###curl -L https://github.com/ccache/ccache/releases/download/v4.8/ccache-4.8-linux-x86_64.tar.xz | $Sudo tar -xJvf- --strip-components=1 -C /usr/local/bin/
 [[ -e sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz ]] || curl -LORJ https://github.com/mozilla/sccache/releases/download/v0.4.2/sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz
@@ -82,12 +88,14 @@ echo build-with-SCCACHE
 [ -d /usr/local/lib/sccache/ ] || $Sudo mkdir -p /usr/local/lib/sccache/
 cat <<EOF1 | $SudoE tee -- /usr/local/lib/sccache/sccache-wrapper2 | grep $grepOPT ""
 #!/usr/bin/env bash
+[ "$DEBUGx" != "" ] && set -x
 SCCACHE_BIN="\$(command -v sccache || echo sccache )"
 cd "\$(dirname "\$0")" || exit 2
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 cat > "./\${COMPILER}" <<-EOF
 #!/bin/bash
 [ "$DEBUGwrapper" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 SCCACHE_WRAPPER_BINDIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)  # Intentionally don't resolve symlinks
 # SCCACHE_WRAPPER_BINDIR2="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
@@ -108,6 +116,7 @@ EOF1
 cat <<'Endofmessage' | $SudoE tee -- /usr/local/lib/sccache/sccache-wrapper | grep $grepOPT -E "$"
 #!/bin/sh
 ### #!/usr/bin/env bash
+[ "$DEBUGx" != "" ] && set -x
 _has_command() {
   # well, this is exactly `for cmd in "$@"; do`
   for cmd do
@@ -128,6 +137,7 @@ cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/bash || command -v bash )
 ### #!/bin/bash
 [ "$DEBUGwrapper" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 
 # debug
@@ -170,6 +180,7 @@ cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/sh || command -v sh )
 ### #!/bin/sh
 [ "$DEBUGwrapper" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
@@ -203,6 +214,7 @@ Endofmessage
 cat <<'Endofmessage' | $SudoE tee -- /usr/local/lib/sccache/sccache-wrapper-sh | grep $grepOPT -E "$"
 #!/bin/sh
 ### #!/usr/bin/env bash
+[ "$DEBUGx" != "" ] && set -x
 _has_command() {
   # well, this is exactly `for cmd in "$@"; do`
   for cmd do
@@ -211,6 +223,7 @@ _has_command() {
 }
 
 [ "$DEBUGwrapper" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 SCCACHE_BIN="$(command -v sccache || echo sccache )"
 DIRNAME=$(dirname "$0")
 #cd "\$(dirname "\$PWD\$0")"
@@ -218,11 +231,13 @@ cd "$DIRNAME"
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 #cat > "./\${COMPILER}" <<-EndofScript
 [ "$DEBUGwrapper" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 _has_command DISABELbash && {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/bash || command -v bash )
 ### #!/bin/bash
 [ "$DEBUGwrapper" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 
 # debug
@@ -251,6 +266,7 @@ cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/sh || command -v sh )
 ### #!/bin/sh
 [ "$DEBUGwrapper" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
@@ -281,6 +297,7 @@ done
 Endofmessage
 
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 
 #echo "# foo" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 ##echo "\\${SCCACHE_BIN} \\${COMPILER} \"$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
@@ -330,45 +347,56 @@ echo "int x = 1;" > /tmp/test.c
 echo "int x = $RANDOM;" > /tmp/test-RANDOM.c
 set +x
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 _has_command ccache && {
 set -x
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 ccache --show-stats
 ccache gcc /tmp/test.c -c -o /tmp/test.o
 ccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
 ccache --show-stats
 set +x
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 }
 _has_command sccache && {
 set -x
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 sccache --show-stats
 sccache /usr/bin/gcc /tmp/test.c -c -o /tmp/test.o
 sccache /usr/bin/gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
 sccache --show-stats
 set +x
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 }
 
 set -x
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 gcc /tmp/test.c -c -o /tmp/test.o
 gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
 set +x
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 
 _has_command ccache && {
 set -x
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 ccache --show-stats
 set +x
+[ "$DEBUGx" != "" ] && set -x
 }
 _has_command sccache && {
 set -x
 [ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGx" != "" ] && set -x
 sccache --show-stats
 set +x
+[ "$DEBUGx" != "" ] && set -x
 }
 
 #[ command -v ccache >/dev/null 2>&1 ] && ccache gcc /tmp/test.c -c -o /tmp/test.o ||:
