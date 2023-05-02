@@ -38,6 +38,9 @@ export -p | grep -i deb
 export DEBUG=
 export DEBUG=1
 
+export DEBUGwrapper=
+### export DEBUGwrapper=1
+
 # PN=$(dirname "$0")
 
 [ -d /usr/local/bin/ ] || $Sudo mkdir -p /usr/local/bin/
@@ -72,13 +75,13 @@ cd "\$(dirname "\$0")" || exit 2
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 cat > "./\${COMPILER}" <<-EOF
 #!/bin/bash
-[ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGwrapper" != "" ] && set -vx
 SCCACHE_WRAPPER_BINDIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)  # Intentionally don't resolve symlinks
 # SCCACHE_WRAPPER_BINDIR2="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
-[ "$DEBUG" != "" ] && echo "delete any instance at the beginning"
+[ "$DEBUGwrapper" != "" ] && echo "delete any instance at the beginning"
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
-[ "$DEBUG" != "" ] && echo "delete any instance in the at the end"
+[ "$DEBUGwrapper" != "" ] && echo "delete any instance in the at the end"
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
 # /usr/bin/sccache \${COMPILER} "\$@"
 \${SCCACHE_BIN} \${COMPILER} "$@"
@@ -100,7 +103,7 @@ _has_command() {
   done
 }
 
-[ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGwrapper" != "" ] && set -vx
 SCCACHE_BIN="$(command -v sccache || echo sccache )"
 DIRNAME=$(dirname "$0")
 #cd "\$(dirname "\$PWD\$0")"
@@ -112,11 +115,11 @@ _has_command bash && {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/bash || command -v bash )
 ### #!/bin/bash
-[ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGwrapper" != "" ] && set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 
 # debug
-[ "$DEBUG" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+[ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 #PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -125,14 +128,14 @@ SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't r
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
-[ "$DEBUG" != "" ] && echo "\$PATH"
-[ "$DEBUG" != "" ] && echo "delete any instances in the middle"
+[ "$DEBUGwrapper" != "" ] && echo "\$PATH"
+[ "$DEBUGwrapper" != "" ] && echo "delete any instances in the middle"
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
-[ "$DEBUG" != "" ] && echo "delete any instance at the beginning"
+[ "$DEBUGwrapper" != "" ] && echo "delete any instance at the beginning"
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
-[ "$DEBUG" != "" ] && echo "delete any instance in the at the end"
+[ "$DEBUGwrapper" != "" ] && echo "delete any instance in the at the end"
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
-[ "$DEBUG" != "" ] && echo "\$PATH"
+[ "$DEBUGwrapper" != "" ] && echo "\$PATH"
 # /usr/bin/sccache \${COMPILER} "\$@"
 # 1 \${SCCACHE_BIN} \${COMPILER} "$@"
 # 2 \${SCCACHE_BIN} \${COMPILER} "\\$\\@"
@@ -154,11 +157,11 @@ _has_command bash || {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/sh || command -v sh )
 ### #!/bin/sh
-[ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGwrapper" != "" ] && set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
-[ "$DEBUG" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+[ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 #PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -168,15 +171,15 @@ SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
 ## str=$(printf '%s' "$str" | sed -e 's@/@a@g')
-[ "$DEBUG" != "" ] && echo "\$PATH"
-[ "$DEBUG" != "" ] && echo "sed: delete any instances in the middle"
-[ "$DEBUG" != "" ] && echo "sed: delete any instance at the beginning"
-[ "$DEBUG" != "" ] && echo "sed: delete any instance in the at the end"
+[ "$DEBUGwrapper" != "" ] && echo "\$PATH"
+[ "$DEBUGwrapper" != "" ] && echo "sed: delete any instances in the middle"
+[ "$DEBUGwrapper" != "" ] && echo "sed: delete any instance at the beginning"
+[ "$DEBUGwrapper" != "" ] && echo "sed: delete any instance in the at the end"
 PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:'\$SCCACHE_WRAPPER_BINDIR'[/]:@@g' -e 's@'\$SCCACHE_WRAPPER_BINDIR'[/]:@@g' -e 's@:'\$SCCACHE_WRAPPER_BINDIR'[/]@@g' )"
 ## PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 ## PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
 ## PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
-[ "$DEBUG" != "" ] && echo "\$PATH"
+[ "$DEBUGwrapper" != "" ] && echo "\$PATH"
 ${SCCACHE_BIN} ${COMPILER} "\$@"
 EndofScript
 }
@@ -195,23 +198,23 @@ _has_command() {
   done
 }
 
-[ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGwrapper" != "" ] && set -vx
 SCCACHE_BIN="$(command -v sccache || echo sccache )"
 DIRNAME=$(dirname "$0")
 #cd "\$(dirname "\$PWD\$0")"
 cd "$DIRNAME"
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 #cat > "./\${COMPILER}" <<-EndofScript
-[ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGwrapper" != "" ] && set -vx
 _has_command DISABELbash && {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/bash || command -v bash )
 ### #!/bin/bash
-[ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGwrapper" != "" ] && set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 
 # debug
-[ "$DEBUG" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+[ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 #PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -220,14 +223,14 @@ SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't r
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
-[ "$DEBUG" != "" ] && echo "\$PATH"
-[ "$DEBUG" != "" ] && echo "delete any instances in the middle"
+[ "$DEBUGwrapper" != "" ] && echo "\$PATH"
+[ "$DEBUGwrapper" != "" ] && echo "delete any instances in the middle"
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
-[ "$DEBUG" != "" ] && echo "delete any instance at the beginning"
+[ "$DEBUGwrapper" != "" ] && echo "delete any instance at the beginning"
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
-[ "$DEBUG" != "" ] && echo "delete any instance in the at the end"
+[ "$DEBUGwrapper" != "" ] && echo "delete any instance in the at the end"
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
-[ "$DEBUG" != "" ] && echo "\$PATH"
+[ "$DEBUGwrapper" != "" ] && echo "\$PATH"
 ${SCCACHE_BIN} ${COMPILER} "\$@"
 EndofScript
 }
@@ -235,11 +238,11 @@ _has_command SHELLLbash || {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/sh || command -v sh )
 ### #!/bin/sh
-[ "$DEBUG" != "" ] && set -vx
+[ "$DEBUGwrapper" != "" ] && set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 
 # debug
-[ "$DEBUG" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
+[ "$DEBUGwrapper" != "" ] && PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH:\$SCCACHE_WRAPPER_BINDIR:/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 #PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 #PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
@@ -249,10 +252,10 @@ SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
 ## str=$(printf '%s' "$str" | sed -e 's@/@a@g')
-[ "$DEBUG" != "" ] && echo "\$PATH"
-[ "$DEBUG" != "" ] && echo "sed: delete any instances in the middle"
-[ "$DEBUG" != "" ] && echo "sed: delete any instance at the beginning"
-[ "$DEBUG" != "" ] && echo "sed: delete any instance in the at the end"
+[ "$DEBUGwrapper" != "" ] && echo "\$PATH"
+[ "$DEBUGwrapper" != "" ] && echo "sed: delete any instances in the middle"
+[ "$DEBUGwrapper" != "" ] && echo "sed: delete any instance at the beginning"
+[ "$DEBUGwrapper" != "" ] && echo "sed: delete any instance in the at the end"
 PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:'\$SCCACHE_WRAPPER_BINDIR'[/]:@@g' -e 's@'\$SCCACHE_WRAPPER_BINDIR'[/]:@@g' -e 's@:'\$SCCACHE_WRAPPER_BINDIR'[/]@@g' )"
 ## PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 ## PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
