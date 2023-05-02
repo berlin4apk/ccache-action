@@ -307,17 +307,17 @@ source ~/.bashrc && echo "$PATH"
 
 echo "int x = 1;" > /tmp/test.c
 echo "int x = $RANDOM;" > /tmp/test-RANDOM.c
-_has_command ccache ||: && ccache gcc /tmp/test.c -c -o /tmp/test.o
-_has_command ccache ||: && ccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
-_has_command sccache ||: && sccache --show-stats
-_has_command sccache ||: && sccache gcc /tmp/test.c -c -o /tmp/test.o
-_has_command sccache ||: && sccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
-_has_command ccache ||: && ccache --show-stats
-_has_command sccache ||: && sccache --show-stats
+[ _has_command ccache ] && ccache gcc /tmp/test.c -c -o /tmp/test.o
+[ _has_command ccache ] && ccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
+[ _has_command ccache ] && sccache --show-stats
+[ _has_command ccache ] && sccache gcc /tmp/test.c -c -o /tmp/test.o
+[ _has_command ccache ] && sccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
+[ _has_command ccache ] && ccache --show-stats
+[ _has_command ccache ] && sccache --show-stats
 gcc /tmp/test.c -c -o /tmp/test.o
 gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
-_has_command ccache ||: && ccache --show-stats
-_has_command sccache ||: && sccache --show-stats
+[ _has_command ccache ] && ccache --show-stats
+[ _has_command ccache ] && sccache --show-stats
 
 #for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/bin/ccache /usr/local/bin/$t; done
 ##for t in gcc g++ cc c++ clang clang++; do $Sudo ln -vs /usr/local/bin/sccache /usr/local/bin/$t; done
