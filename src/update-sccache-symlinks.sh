@@ -101,7 +101,8 @@ echo "done" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 
 
 $Sudo chmod 755 /usr/lib/sccache/sccache-wrapper || $Sudo chmod 755 /usr/local/lib/sccache/sccache-wrapper
-$SudoE /usr/lib/sccache/sccache-wrapper || $SudoE /usr/local/lib/sccache/sccache-wrapper
+[ -d /usr/lib/sccache/ ] && cd /usr/lib/sccache/ && $SudoE ./sccache-wrapper
+[ -d /usr/local/lib/sccache/ ] && cd /usr/local/lib/sccache/ && $SudoE ./sccache-wrapper  
 ls -latr /usr/lib/sccache/ /usr/local/lib/sccache/ /usr/local/bin/ ||:
 
 
