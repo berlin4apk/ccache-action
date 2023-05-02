@@ -307,17 +307,17 @@ source ~/.bashrc && echo "$PATH"
 
 echo "int x = 1;" > /tmp/test.c
 echo "int x = $RANDOM;" > /tmp/test-RANDOM.c
-[ command -v ccache ] && ccache gcc /tmp/test.c -c -o /tmp/test.o
-[ command -v ccache ] && ccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
-[ command -v sccache ] && sccache --show-stats
-[ command -v sccache ] && sccache gcc /tmp/test.c -c -o /tmp/test.o
-[ command -v sccache ] && sccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
-[ command -v ccache ] && ccache --show-stats
-[ command -v sccache ] && sccache --show-stats
+[ command -v ccache >/dev/null 2>&1 ] && ccache gcc /tmp/test.c -c -o /tmp/test.o
+[ command -v ccache >/dev/null 2>&1 ] && ccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
+[ command -v sccache >/dev/null 2>&1 ] && sccache --show-stats
+[ command -v sccache >/dev/null 2>&1 ] && sccache gcc /tmp/test.c -c -o /tmp/test.o
+[ command -v sccache >/dev/null 2>&1 ] && sccache gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
+[ command -v ccache >/dev/null 2>&1 ] && ccache --show-stats
+[ command -v sccache >/dev/null 2>&1 ] && sccache --show-stats
 gcc /tmp/test.c -c -o /tmp/test.o
 gcc /tmp/test-RANDOM.c -c -o /tmp/test-RANDOM.o
-[ command -v ccache ] && ccache --show-stats
-[ command -v sccache ] && sccache --show-stats
+[ command -v ccache >/dev/null 2>&1 ] && ccache --show-stats
+[ command -v sccache >/dev/null 2>&1 ] && sccache --show-stats
 
 #for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/bin/ccache /usr/local/bin/$t; done
 ##for t in gcc g++ cc c++ clang clang++; do $Sudo ln -vs /usr/local/bin/sccache /usr/local/bin/$t; done
