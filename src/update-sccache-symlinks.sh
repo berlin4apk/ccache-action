@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 
-set -xv
+
+export DEBUG=
+### export DEBUG=1
+
+export DEBUGwrapper=
+### export DEBUGwrapper=1
+
+
+
+[ "$DEBUG" != "" ] && set -vx
+
 
 # docker run --rm -it ubuntu:22.04
 # apt update && apt install --yes curl build-essential nvi git shellcheck ash apt-file file busybox
@@ -35,11 +45,6 @@ _has_command() {
 export "$(dpkg-architecture)"
 export -p | grep -i deb
 
-export DEBUG=
-export DEBUG=1
-
-export DEBUGwrapper=
-### export DEBUGwrapper=1
 
 # PN=$(dirname "$0")
 
