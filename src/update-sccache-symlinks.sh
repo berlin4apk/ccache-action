@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
 
-unset DEBUG=
+#unset DEBUG=
+export DEBUG=
 ### export DEBUG=1
 
-unset DEBUGwrapper=
+#unset DEBUGwrapper=
+export DEBUGwrapper=
 ### export DEBUGwrapper=1
 
 #export teeDEVNULL="-- |grep -q \"\""
