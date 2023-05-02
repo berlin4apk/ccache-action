@@ -7,7 +7,7 @@ unset DEBUG=
 unset DEBUGwrapper=
 ### export DEBUGwrapper=1
 
-export teeDEVNULL="> /dev/null"
+export teeDEVNULL='>/dev/null'
 [ "$DEBUG" != "" ] && unset teeDEVNULL=
 
 [ "$DEBUG" != "" ] && set -vx
