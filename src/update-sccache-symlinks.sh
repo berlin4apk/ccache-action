@@ -66,6 +66,7 @@ EOF1
 cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper
 # cat <<EOF1 | $SudoE tee /usr/local/lib/sccache/sccache-wrapper
 #!/usr/bin/env bash
+set -vx
 SCCACHE_BIN="\$(command -v sccache || echo sccache )"
 DIRNAME=$(dirname "$0")
 #cd "\$(dirname "\$PWD\$0")"
