@@ -303,9 +303,9 @@ $Sudo chmod 755 /usr/lib/sccache/sccache-wrapper-sh || $Sudo chmod 755 /usr/loca
 #[ -d /usr/local/lib/sccache/ ] && cd /usr/local/lib/sccache/ && $SudoE sccache-wrapper
 [ -d /usr/local/lib/sccache/ ] && $SudoE /usr/local/lib/sccache/sccache-wrapper
 [ -d /usr/lib/sccache/ ] && $SudoE /usr/lib/sccache/sccache-wrapper
-[ -d /usr/lib/sccache/ ] && sh -x -C "ls -latr /usr/lib/sccache/"
-[ -d /usr/local/lib/sccache/ ] && sh -x -C "ls -latr /usr/local/lib/sccache/"
-[ "$DEBUG" != "" ] && [ -d /usr/local/bin/ ] && sh -x -C "ls -latr /usr/local/bin/"
+[ -d /usr/lib/sccache/ ] && sh -O-x -c "ls -latr /usr/lib/sccache/"
+[ -d /usr/local/lib/sccache/ ] && sh -O-x -c "ls -latr /usr/local/lib/sccache/"
+[ "$DEBUG" != "" ] && [ -d /usr/local/bin/ ] && sh -O-x -c "ls -latr /usr/local/bin/"
 
 
 # Prepend ccache into the PATH
