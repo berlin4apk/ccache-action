@@ -99,7 +99,7 @@ PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 
-PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
+### PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
@@ -140,7 +140,7 @@ PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 
-PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
+### PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
@@ -189,7 +189,7 @@ PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 
-PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
+### PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
@@ -216,7 +216,7 @@ PATH="\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 PATH="/usrfoo:\$SCCACHE_WRAPPER_BINDIR:\$PATH"
 PATH="\$PATH/usrfoo:\$SCCACHE_WRAPPER_BINDIR"
 
-PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
+### PATH="/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache:\$PATH:/usr/local/lib/sccache"
 #PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
 #PATH="$PATH/usrfoo:/usr/local/lib/sccache"
 
