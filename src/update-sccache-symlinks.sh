@@ -7,7 +7,8 @@ unset DEBUG=
 unset DEBUGwrapper=
 ### export DEBUGwrapper=1
 
-
+teeDEVNULL="> /dev/null"
+[ "$DEBUG" != "" ] && export teeDEVNULL=
 
 [ "$DEBUG" != "" ] && set -vx
 
@@ -42,8 +43,8 @@ _has_command() {
     sudo echo 2>/dev/null && Sudo="sudo $SudoVAR" || Sudo=""
   }
 
-export "$(dpkg-architecture)"
-export -p | grep -i deb
+[ "$DEBUG" != "" ] && export "$(dpkg-architecture)"
+[ "$DEBUG" != "" ] && export -p | grep -i deb
 
 
 # PN=$(dirname "$0")
@@ -73,7 +74,7 @@ fi
 echo build-with-SCCACHE
 # see https://github.com/mozilla/sccache/issues/1155#issuecomment-1097557677
 [ -d /usr/local/lib/sccache/ ] || $Sudo mkdir -p /usr/local/lib/sccache/
-cat <<EOF1 | $SudoE tee /usr/local/lib/sccache/sccache-wrapper2
+cat <<EOF1 | $SudoE tee /usr/local/lib/sccache/sccache-wrapper2 $teeDEVNULL
 #!/usr/bin/env bash
 SCCACHE_BIN="\$(command -v sccache || echo sccache )"
 cd "\$(dirname "\$0")" || exit 2
@@ -98,7 +99,7 @@ chmod 755 "./\${COMPILER}"
 done
 EOF1
 
-cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper
+cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper $teeDEVNULL
 #!/bin/sh
 ### #!/usr/bin/env bash
 _has_command() {
@@ -193,7 +194,7 @@ done
 Endofmessage
 
 
-cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper-sh
+cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper-sh $teeDEVNULL
 #!/bin/sh
 ### #!/usr/bin/env bash
 _has_command() {
@@ -301,7 +302,7 @@ ls -latr /usr/lib/sccache/ /usr/local/lib/sccache/ /usr/local/bin/ ||:
 
 # Prepend ccache into the PATH
 # shellcheck disable=SC2016
-grep -q /usr/local/lib/sccache ~/.bashrc || echo '[ -d /usr/local/lib/sccache/ ] && $( echo "$PATH" | grep -qv /usr/local/lib/sccache ) && export PATH="/usr/local/lib/sccache:$PATH" ' | tee -a ~/.bashrc
+grep -q /usr/local/lib/sccache ~/.bashrc || echo '[ -d /usr/local/lib/sccache/ ] && $( echo "$PATH" | grep -qv /usr/local/lib/sccache ) && export PATH="/usr/local/lib/sccache:$PATH" ' | tee -a ~/.bashrc $teeDEVNULL
 # shellcheck disable=SC2016
 # DISABELD FOR sccache ### echo '[ -d /usr/lib64/sccache/ ] && export PATH="/usr/lib64/sccache:$PATH"' | tee -a ~/.bashrc
 # shellcheck disable=SC2016
