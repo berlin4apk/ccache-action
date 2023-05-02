@@ -37,12 +37,6 @@ _has_command() {
     command -v "$cmd" >/dev/null 2>&1 || return 1
   done
 }
-_has_not_command() {
-  # well, this is exactly `for cmd in "$@"; do`
-  for cmd do
-    command -v "$cmd" >/dev/null 2>&1 && return 1
-  done
-}
      _has_command sudo && {
 #    sudo -n echo 2>/dev/null && SudoVAR="-n $SudoVAR" || SudoVAR="$SudoVAR"
     sudo -n echo 2>/dev/null && SudoVAR="-n $SudoVAR"
@@ -70,7 +64,7 @@ _has_not_command() {
 if [ "$CI" != "true" ]; then
 	echo runing not in CI, no apt install
 else
-_has_not_command sccache && {
+_has_command sccache || {
 	echo runing in CI, missing sccache, install sccache to /usr/local/bin/
 	###curl -L https://github.com/ccache/ccache/releases/download/v4.8/ccache-4.8-linux-x86_64.tar.xz | $Sudo tar -xJvf- --strip-components=1 -C /usr/local/bin/
 [[ -e sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz ]] || curl -LORJ https://github.com/mozilla/sccache/releases/download/v0.4.2/sccache-v0.4.2-x86_64-unknown-linux-musl.tar.gz
