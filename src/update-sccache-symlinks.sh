@@ -265,7 +265,7 @@ chmod 755 ./${COMPILER}
 done
 Endofmessage
 
-
+[ "$DEBUG" != "" ] && set -vx
 
 #echo "# foo" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
 ##echo "\\${SCCACHE_BIN} \\${COMPILER} \"$@\"" | $SudoE tee -a /usr/local/lib/sccache/sccache-wrapper
