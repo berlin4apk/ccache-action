@@ -85,12 +85,23 @@ cd "$DIRNAME"
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 #cat > "./\${COMPILER}" <<-EndofScript
 set -vx
-_has_command fffbash && {
+_has_command DISABELbash && {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/bash || command -v bash )
 ### #!/bin/bash
 set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
+
+# debug
+PATH="/usr/local/lib/sccache:$PATH"
+PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
+PATH="$PATH/usrfoo:/usr/local/lib/sccache"
+
+PATH="$SCCACHE_WRAPPER_BINDIR:$PATH"
+PATH="/usrfoo:$SCCACHE_WRAPPER_BINDIR:$PATH"
+PATH="$PATH/usrfoo:$SCCACHE_WRAPPER_BINDIR"
+
+
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
@@ -111,12 +122,22 @@ ${SCCACHE_BIN} ${COMPILER} "\$@"
 # 12 \${SCCACHE_BIN} \${COMPILER} '\$\100'
 EndofScript
 }
-_has_command fffbash || {
+_has_command SHELLLbash || {
 cat > "./${COMPILER}" <<-EndofScript
 #!$(command -v /bin/sh || command -v sh )
 ### #!/bin/sh
 set -vx
 SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
+
+# debug
+PATH="/usr/local/lib/sccache:$PATH"
+PATH="/usrfoo:/usr/local/lib/sccache:$PATH"
+PATH="$PATH/usrfoo:/usr/local/lib/sccache"
+
+PATH="$SCCACHE_WRAPPER_BINDIR:$PATH"
+PATH="/usrfoo:$SCCACHE_WRAPPER_BINDIR:$PATH"
+PATH="$PATH/usrfoo:$SCCACHE_WRAPPER_BINDIR"
+
 ## str=$(printf '%s' "$str" | sed -e 's@/@a@g')
 PATH="\$(printf '%s\n' "\$PATH" | sed -e 's@:\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@\$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@:\$SCCACHE_WRAPPER_BINDIR@@g' )"
 ## PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
