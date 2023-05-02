@@ -11,7 +11,7 @@ export DEBUG=1
 
 #unset DEBUGwrapper=
 ##export DEBUGwrapper=
-export DEBUGwrapper=1
+###export DEBUGwrapper=1
 
 #unset DEBUGtests=
 ##export DEBUGtests=
