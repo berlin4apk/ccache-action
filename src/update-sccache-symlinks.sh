@@ -51,7 +51,9 @@ cd "\$(dirname "\$0")"
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 cat > "./\${COMPILER}" <<-EOF
 #!/bin/bash
-SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
+set -vx
+SCCACHE_WRAPPER_BINDIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)  # Intentionally don't resolve symlinks
+# SCCACHE_WRAPPER_BINDIR2="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
@@ -66,8 +68,15 @@ done
 EOF1
 
 cat <<'Endofmessage' | $SudoE tee /usr/local/lib/sccache/sccache-wrapper
-# cat <<EOF1 | $SudoE tee /usr/local/lib/sccache/sccache-wrapper
-#!/usr/bin/env bash
+#!/bin/sh
+### #!/usr/bin/env bash
+_has_command() {
+  # well, this is exactly `for cmd in "$@"; do`
+  for cmd do
+    command -v "$cmd" >/dev/null 2>&1 || return 1
+  done
+}
+
 set -vx
 SCCACHE_BIN="$(command -v sccache || echo sccache )"
 DIRNAME=$(dirname "$0")
@@ -76,8 +85,10 @@ cd "$DIRNAME"
 for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
 #cat > "./\${COMPILER}" <<-EndofScript
 set -vx
+_has_command bash && {
 cat > "./${COMPILER}" <<-EndofScript
-#!/bin/bash
+#!$(command -v bash )
+### #!/bin/bash
 SCCACHE_WRAPPER_BINDIR="\$(dirname \${BASH_SOURCE[0]})"  # Intentionally don't resolve symlinks
 PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
 PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
@@ -98,6 +109,20 @@ ${SCCACHE_BIN} ${COMPILER} "\$@"
 # 11 \${SCCACHE_BIN} \${COMPILER} '\$@'
 # 12 \${SCCACHE_BIN} \${COMPILER} '\$\100'
 EndofScript
+}
+_has_command bash || {
+cat > "./${COMPILER}" <<-EndofScript
+#!$(command -v sh )
+### #!/bin/sh
+SCCACHE_WRAPPER_BINDIR="\$(dirname \$0)"  # Intentionally don't resolve symlinks
+## str=$(printf '%s' "$str" | sed -e 's@/@a@g')
+PATH=$(printf '%s\n' "$PATH" | sed -e 's@:$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@$SCCACHE_WRAPPER_BINDIR:@@g' -e 's@:$SCCACHE_WRAPPER_BINDIR@@g' )
+## PATH=\${PATH//":\$SCCACHE_WRAPPER_BINDIR:"/":"} # delete any instances in the middle
+## PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginning
+## PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
+${SCCACHE_BIN} ${COMPILER} "\$@"
+EndofScript
+}
 chmod 755 ./${COMPILER}
 done
 Endofmessage
@@ -120,6 +145,7 @@ $Sudo chmod 755 /usr/lib/sccache/sccache-wrapper || $Sudo chmod 755 /usr/local/l
 #[ -d /usr/lib/sccache/ ] && cd /usr/lib/sccache/ && $SudoE sccache-wrapper
 #[ -d /usr/local/lib/sccache/ ] && cd /usr/local/lib/sccache/ && $SudoE sccache-wrapper
 [ -d /usr/local/lib/sccache/ ] && $SudoE /usr/local/lib/sccache/sccache-wrapper
+[ -d /usr/lib/sccache/ ] && $SudoE /usr/lib/sccache/sccache-wrapper
 ls -latr /usr/lib/sccache/ /usr/local/lib/sccache/ /usr/local/bin/ ||:
 
 
@@ -134,6 +160,9 @@ echo '[ -d /usr/lib/sccache/ ] && export PATH="/usr/lib/sccache:$PATH"' | tee -a
 # shellcheck disable=SC1090
 source ~/.bashrc && echo "$PATH"
 
-cd /usr/local/bin && $Sudo ln -s /usr/local/lib/sccache/* .
+# cd /usr/local/bin && $Sudo ln -s /usr/local/lib/sccache/* .
+[ -d /usr/local/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s /usr/local/lib/sccache/* .
+[ -d /usr/lib/sccache/ ] && cd /usr/local/bin && $Sudo ln -s /usr/lib/sccache/* .
+
 #for t in gcc g++ cc c++ clang clang++; do ln -vs /usr/bin/ccache /usr/local/bin/$t; done
 ##for t in gcc g++ cc c++ clang clang++; do $Sudo ln -vs /usr/local/bin/sccache /usr/local/bin/$t; done
