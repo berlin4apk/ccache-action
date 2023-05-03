@@ -45,7 +45,7 @@ const SELF_CI = process.env["CCACHE_ACTION_CI"] === "true"
 async function restore(ccacheVariant : string) : Promise<void> {
   const inputs = {
     primaryKey: core.getInput("key"),
-    ccacheDir: core.getInput("ccacheDir"),
+    ccacheDir: core.getInput("ccache-dir"),
     // https://github.com/actions/cache/blob/73cb7e04054996a98d39095c0b7821a73fb5b3ea/src/utils/actionUtils.ts#L56
     restoreKeys: core.getInput("restore-keys").split("\n").map(s => s.trim()).filter(x => x !== "")
   };
