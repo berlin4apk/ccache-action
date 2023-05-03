@@ -42,6 +42,8 @@ async function run() : Promise<void> {
       return;
     }
     const ccacheVariant = core.getState("ccacheVariant");
+    const ccacheDir = core.getState("ccacheDir");
+    const paths = core.getState("paths");
     const primaryKey = core.getState("primaryKey");
     if (!ccacheVariant || !primaryKey) {
       core.notice("ccache setup failed, skipping saving.");
@@ -65,7 +67,7 @@ async function run() : Promise<void> {
       } else {
         core.debug("Not appending timestamp because 'append-timestamp' is not set to 'true'.");
       }
-      const paths = [`.${ccacheVariant}`];
+//      const paths = [`.${ccacheVariant}`];
     
       core.info(`Save cache using key "${saveKey}".`);
       await cache.saveCache(paths, saveKey);
