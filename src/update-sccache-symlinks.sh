@@ -95,7 +95,9 @@ cat <<EOF1 | $SudoE tee -- /usr/local/lib/sccache/sccache-wrapper2 | grep $grepO
 [ "$DEBUGx" != "" ] && set -x
 SCCACHE_BIN="\$(command -v sccache || echo sccache )"
 cd "\$(dirname "\$0")" || exit 2
-for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
+###for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc"; do
+
+for COMPILER in "clang" "clang++" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc"; do
 cat > "./\${COMPILER}" <<-EOF
 #!/bin/bash
 [ "$DEBUGwrapper" != "" ] && set -vx
@@ -112,6 +114,21 @@ PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the 
 \${SCCACHE_BIN} \${COMPILER} "\\$\\@"
 \${SCCACHE_BIN} \${COMPILER} "\$\@"
 \${SCCACHE_BIN} \${COMPILER} "\$@"
+# /usr/bin/sccache \${COMPILER} "\$@"
+# 1 \${SCCACHE_BIN} \${COMPILER} "$@"
+# 2 \${SCCACHE_BIN} \${COMPILER} "\\$\\@"
+# 3 \${SCCACHE_BIN} \${COMPILER} "\$\@"
+# 4 \${SCCACHE_BIN} \${COMPILER} "\$@"
+# 4a ${SCCACHE_BIN} ${COMPILER} "\$@"
+${SCCACHE_BIN} ${COMPILER} "\$@"
+# 5 \${SCCACHE_BIN} \${COMPILER} '$@'
+# 6 \${SCCACHE_BIN} \${COMPILER} '$\@'
+# 7 \${SCCACHE_BIN} \${COMPILER} '\$@'
+# 8 \${SCCACHE_BIN} \${COMPILER} '\$\@'
+# 9 \${SCCACHE_BIN} \${COMPILER} '$@'0
+# 10 \${SCCACHE_BIN} \${COMPILER} '$\100'
+# 11 \${SCCACHE_BIN} \${COMPILER} '\$@'
+# 12 \${SCCACHE_BIN} \${COMPILER} '\$\100'
 EOF
 chmod 755 "./\${COMPILER}"
 done
@@ -133,7 +150,9 @@ SCCACHE_BIN="$(command -v sccache || echo sccache )"
 DIRNAME=$(dirname "$0")
 #cd "\$(dirname "\$PWD\$0")"
 cd "$DIRNAME" || exit 23
-for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
+###for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc"; do
+
+for COMPILER in "clang" "clang++" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc"; do
 #cat > "./\${COMPILER}" <<-EndofScript
 [ "$DEBUGwrapper" != "" ] && set -vx
 _has_command bash && {
@@ -162,21 +181,7 @@ PATH=\${PATH/#"\$SCCACHE_WRAPPER_BINDIR:"/} # delete any instance at the beginni
 [ "$DEBUGwrapper" != "" ] && echo "delete any instance in the at the end"
 PATH=\${PATH/%":\$SCCACHE_WRAPPER_BINDIR"/} # delete any instance in the at the end
 [ "$DEBUGwrapper" != "" ] && echo "\$PATH"
-# /usr/bin/sccache \${COMPILER} "\$@"
-# 1 \${SCCACHE_BIN} \${COMPILER} "$@"
-# 2 \${SCCACHE_BIN} \${COMPILER} "\\$\\@"
-# 3 \${SCCACHE_BIN} \${COMPILER} "\$\@"
-# 4 \${SCCACHE_BIN} \${COMPILER} "\$@"
-# 4a ${SCCACHE_BIN} ${COMPILER} "\$@"
 ${SCCACHE_BIN} ${COMPILER} "\$@"
-# 5 \${SCCACHE_BIN} \${COMPILER} '$@'
-# 6 \${SCCACHE_BIN} \${COMPILER} '$\@'
-# 7 \${SCCACHE_BIN} \${COMPILER} '\$@'
-# 8 \${SCCACHE_BIN} \${COMPILER} '\$\@'
-# 9 \${SCCACHE_BIN} \${COMPILER} '$@'0
-# 10 \${SCCACHE_BIN} \${COMPILER} '$\100'
-# 11 \${SCCACHE_BIN} \${COMPILER} '\$@'
-# 12 \${SCCACHE_BIN} \${COMPILER} '\$\100'
 EndofScript
 }
 _has_command bash || {
@@ -232,7 +237,9 @@ SCCACHE_BIN="$(command -v sccache || echo sccache )"
 DIRNAME=$(dirname "$0")
 #cd "\$(dirname "\$PWD\$0")"
 cd "$DIRNAME" || exit 23
-for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc"; do
+###for COMPILER in "c++" "c89" "c99" "cc" "clang" "clang++" "cpp" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-c++" "x86_64-pc-linux-gnu-cc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-c++" "arm-none-eabi-cc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-c++" "aarch64-linux-gnu-cc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc"; do
+
+for COMPILER in "clang" "clang++" "g++" "gcc" "rustc" "x86_64-pc-linux-gnu-g++" "x86_64-pc-linux-gnu-gcc" "arm-none-eabi-g++" "arm-none-eabi-gcc" "aarch64-linux-gnu-g++" "aarch64-linux-gnu-gcc"; do
 #cat > "./\${COMPILER}" <<-EndofScript
 [ "$DEBUGwrapper" != "" ] && set -vx
 [ "$DEBUGx" != "" ] && set -x
