@@ -61928,6 +61928,8 @@ async function run() {
             return;
         }
         const ccacheVariant = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getState("ccacheVariant");
+        const ccacheDir = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getState("ccacheDir");
+        //    const paths = core.getState("paths");
         const primaryKey = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getState("primaryKey");
         if (!ccacheVariant || !primaryKey) {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.notice("ccache setup failed, skipping saving.");
@@ -61950,9 +61952,24 @@ async function run() {
             else {
                 _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug("Not appending timestamp because 'append-timestamp' is not set to 'true'.");
             }
-            const paths = [`.${ccacheVariant}`];
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Save cache using key "${saveKey}".`);
-            await _actions_cache__WEBPACK_IMPORTED_MODULE_1__.saveCache(paths, saveKey);
+            //      const paths = [`.${ccacheVariant}`];
+            //     if (ccacheDir) {
+            if (_actions_core__WEBPACK_IMPORTED_MODULE_0__.getState("ccacheDir") != "") {
+                //       core.saveState("ccacheDir", ccacheDir);
+                const paths = [`${ccacheDir}`];
+                _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Save cache using key "${saveKey}".`);
+                await _actions_cache__WEBPACK_IMPORTED_MODULE_1__.saveCache(paths, saveKey);
+                //       core.saveState("paths", paths);
+            }
+            else {
+                //       core.saveState("ccacheDir", ccacheDir);
+                const paths = [`.${ccacheVariant}`];
+                _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Save cache using key "${saveKey}".`);
+                await _actions_cache__WEBPACK_IMPORTED_MODULE_1__.saveCache(paths, saveKey);
+                //       core.saveState("paths", paths);
+            }
+            //      core.info(`Save cache using key "${saveKey}".`);
+            //      await cache.saveCache(paths, saveKey);
         }
     }
     catch (error) {
