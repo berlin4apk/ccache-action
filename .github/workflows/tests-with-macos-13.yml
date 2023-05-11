@@ -209,7 +209,7 @@ jobs:
         run: |
           ${{ matrix.variant }} -sv || ${{ matrix.variant }} -s || true
           ${{ matrix.variant }} -s | grep -E '(Hits:.+2.+/.+3)|cache hit.+2$|Cache hits.+2$'
-        if: ${{ !matrix.xfail }}
+#disabeld is for windows tests        if: ${{ !matrix.xfail }}
 
   test_cache_hit:
     # Test that loading from the cache works.
