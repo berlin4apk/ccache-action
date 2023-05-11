@@ -1,4 +1,4 @@
-name: macos-13
+name: Tests macos-13
 
 on:
   push:
