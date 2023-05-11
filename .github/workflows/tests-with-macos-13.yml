@@ -217,17 +217,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        #os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-13]
         shell: [bash]
         variant: [sccache, ccache]
         install-from-github: ['false', 'true']
-        include:
+#        include:
 #          - { os: windows-latest, shell: powershell, variant: sccache }
 #          - { os: windows-latest, shell: powershell, variant: ccache }
-          - { os: windows-latest, shell: powershell, variant: sccache, install-from-github: true }
-          - { os: windows-latest, shell: powershell, variant: ccache, install-from-github: true }
-          - { os: windows-latest, shell: powershell, variant: sccache, install-from-github: false }
-          - { os: windows-latest, shell: powershell, variant: ccache, install-from-github: false }
+          #- { os: windows-latest, shell: powershell, variant: sccache, install-from-github: true }
+          #- { os: windows-latest, shell: powershell, variant: ccache, install-from-github: true }
+          #- { os: windows-latest, shell: powershell, variant: sccache, install-from-github: false }
+          #- { os: windows-latest, shell: powershell, variant: ccache, install-from-github: false }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -248,17 +249,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        #os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-13]
         shell: [bash]
         variant: [sccache, ccache]
         install-from-github: ['false', 'true']
-        include:
+        #include:
 #          - { os: windows-latest, shell: powershell, variant: sccache }
 #          - { os: windows-latest, shell: powershell, variant: ccache }
-          - { os: windows-latest, shell: powershell, variant: sccache, install-from-github: true }
-          - { os: windows-latest, shell: powershell, variant: ccache, install-from-github: true }
-          - { os: windows-latest, shell: powershell, variant: sccache, install-from-github: false }
-          - { os: windows-latest, shell: powershell, variant: ccache, install-from-github: false }
+          #- { os: windows-latest, shell: powershell, variant: sccache, install-from-github: true }
+          #- { os: windows-latest, shell: powershell, variant: ccache, install-from-github: true }
+          #- { os: windows-latest, shell: powershell, variant: sccache, install-from-github: false }
+          #- { os: windows-latest, shell: powershell, variant: ccache, install-from-github: false }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -289,17 +291,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        #os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-13]
         shell: [bash]
         variant: [sccache, ccache]
         install-from-github: ['false', 'true']
-        include:
+        #include:
 #          - { os: windows-latest, shell: powershell, variant: sccache }
 #          - { os: windows-latest, shell: powershell, variant: ccache }
-          - { os: windows-latest, shell: powershell, variant: sccache, install-from-github: true }
-          - { os: windows-latest, shell: powershell, variant: ccache, install-from-github: true }
-          - { os: windows-latest, shell: powershell, variant: sccache, install-from-github: false }
-          - { os: windows-latest, shell: powershell, variant: ccache, install-from-github: false }
+          #- { os: windows-latest, shell: powershell, variant: sccache, install-from-github: true }
+          #- { os: windows-latest, shell: powershell, variant: ccache, install-from-github: true }
+          #- { os: windows-latest, shell: powershell, variant: sccache, install-from-github: false }
+          #- { os: windows-latest, shell: powershell, variant: ccache, install-from-github: false }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -348,7 +351,8 @@ jobs:
 
   test_option_save:
     # Test that the 'save' option is available.
-    runs-on: ubuntu-latest
+    ###runs-on: ubuntu-latest
+    runs-on: macos-13
     needs: [build]
     strategy:
       matrix:
@@ -370,7 +374,8 @@ jobs:
 
   test_option_append_timestamp:
     # Test that the 'append-timestamp' option is available.
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: macos-13
     needs: [build]
     strategy:
       matrix:
