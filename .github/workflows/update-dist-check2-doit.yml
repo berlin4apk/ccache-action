@@ -58,7 +58,7 @@ jobs:
           git commit -m "Pack with dependencies to ${{ inputs.packedjsstatuschanges }}"
       - name: Push packed js
         if: steps.commitPackedJs.outcome == 'success'
-        uses: ad-m/github-push-action@0fafdd62b84042d49ec0cb92d9cac7f7ce4ec79e
+        uses: ad-m/github-push-action@c361e2bb0747df3110bdbe051b209b40766670ec
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # tags: true
