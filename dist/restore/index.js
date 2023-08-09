@@ -58459,13 +58459,25 @@ const SELF_CI = process__WEBPACK_IMPORTED_MODULE_7__.env.CCACHE_ACTION_CI === "t
 async function restore(ccacheVariant) {
     const inputs = {
         primaryKey: _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput("key"),
+        ccacheDir: _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput("ccache-dir"),
         // https://github.com/actions/cache/blob/73cb7e04054996a98d39095c0b7821a73fb5b3ea/src/utils/actionUtils.ts#L56
         restoreKeys: _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput("restore-keys").split("\n").map(s => s.trim()).filter(x => x !== "")
     };
     const keyPrefix = ccacheVariant + "-";
+    const ccacheDir = inputs.ccacheDir;
     const primaryKey = inputs.primaryKey ? keyPrefix + inputs.primaryKey + "-" : keyPrefix;
     const restoreKeys = inputs.restoreKeys.map(k => keyPrefix + k + "-");
-    const paths = [`.${ccacheVariant}`];
+    const paths = [`${ccacheDir}`];
+    if (ccacheDir) {
+        _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("ccacheDir", ccacheDir);
+        const paths = [`${ccacheDir}`];
+        _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("paths", paths);
+    }
+    else {
+        _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("ccacheDir", ccacheDir);
+        const paths = [`.${ccacheVariant}`];
+        _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("paths", paths);
+    }
     _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("primaryKey", primaryKey);
     const restoredWith = await _actions_cache__WEBPACK_IMPORTED_MODULE_8__.restoreCache(paths, primaryKey, restoreKeys);
     if (restoredWith) {
@@ -58486,11 +58498,22 @@ async function configure(ccacheVariant) {
     if (dontDoConfig) {
         const ghWorkSpace = process__WEBPACK_IMPORTED_MODULE_7__.env.GITHUB_WORKSPACE || "unreachable, make ncc happy";
         const ccacheDir = _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput('ccache-dir');
+        //  core.saveState("ccacheDir", ccacheDir);
         //  const sccacheDir = core.getInput('sccache-dir');
         const maxSize = _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput('max-size');
         const compression_level = _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput('compression-level');
+        if (ccacheDir) {
+            const paths = [`${ccacheDir}`];
+            _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("paths", paths);
+        }
+        else {
+            const paths = [`.${ccacheVariant}`];
+            _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("paths", paths);
+        }
         if (ccacheVariant === "ccache") {
             //await execBash(`ccache --set-config=cache_dir='${path.join(ghWorkSpace, '.ccache')}'`);
+            //    await execBash(`ccache --set-config=cache_dir='${path.join(ccacheDir)}'`);
+            //    await execBash(`ccache --set-config=cache_dir='${path.join(paths)}'`);
             await execBash(`ccache --set-config=cache_dir='${path__WEBPACK_IMPORTED_MODULE_3___default().join(ccacheDir)}'`);
             await execBash(`ccache --set-config=max_size='${maxSize}'`);
             await execBash(`ccache --set-config=compression_level='${compression_level}'`);
@@ -58804,6 +58827,8 @@ function checkSha256Sum(path, expectedSha256) {
 }
 async function runInner() {
     const ccacheVariant = _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput("variant");
+    const ccacheDir = _actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput('ccache-dir');
+    _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("ccacheDir", ccacheDir);
     _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("ccacheVariant", ccacheVariant);
     _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("shouldSave", _actions_core__WEBPACK_IMPORTED_MODULE_4__.getBooleanInput("save"));
     _actions_core__WEBPACK_IMPORTED_MODULE_4__.saveState("appendTimestamp", _actions_core__WEBPACK_IMPORTED_MODULE_4__.getBooleanInput("append-timestamp"));

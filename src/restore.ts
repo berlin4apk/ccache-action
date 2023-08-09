@@ -45,14 +45,26 @@ const SELF_CI = process.env["CCACHE_ACTION_CI"] === "true"
 async function restore(ccacheVariant : string) : Promise<void> {
   const inputs = {
     primaryKey: core.getInput("key"),
+    ccacheDir: core.getInput("ccache-dir"),
     // https://github.com/actions/cache/blob/73cb7e04054996a98d39095c0b7821a73fb5b3ea/src/utils/actionUtils.ts#L56
     restoreKeys: core.getInput("restore-keys").split("\n").map(s => s.trim()).filter(x => x !== "")
   };
 
   const keyPrefix = ccacheVariant + "-";
+  const ccacheDir = inputs.ccacheDir;
   const primaryKey = inputs.primaryKey ? keyPrefix + inputs.primaryKey + "-" : keyPrefix;
   const restoreKeys = inputs.restoreKeys.map(k => keyPrefix + k + "-")
-  const paths = [`.${ccacheVariant}`];
+  const paths = [`${ccacheDir}`];
+
+  if (ccacheDir) {
+    core.saveState("ccacheDir", ccacheDir);
+    const paths = [`${ccacheDir}`];
+    core.saveState("paths", paths);
+      } else {
+    core.saveState("ccacheDir", ccacheDir);
+    const paths = [`.${ccacheVariant}`];
+    core.saveState("paths", paths);
+  }
 
   core.saveState("primaryKey", primaryKey);
 
@@ -76,12 +88,22 @@ async function configure(ccacheVariant : string) : Promise<void> {
 	if (dontDoConfig) {
   const ghWorkSpace = process.env.GITHUB_WORKSPACE || "unreachable, make ncc happy";
   const ccacheDir = core.getInput('ccache-dir');
+//  core.saveState("ccacheDir", ccacheDir);
 //  const sccacheDir = core.getInput('sccache-dir');
   const maxSize = core.getInput('max-size');
   const compression_level = core.getInput('compression-level');
+  if (ccacheDir) {
+    const paths = [`${ccacheDir}`];
+    core.saveState("paths", paths);
+      } else {
+    const paths = [`.${ccacheVariant}`];
+    core.saveState("paths", paths);
+  }
   
   if (ccacheVariant === "ccache") {
     //await execBash(`ccache --set-config=cache_dir='${path.join(ghWorkSpace, '.ccache')}'`);
+//    await execBash(`ccache --set-config=cache_dir='${path.join(ccacheDir)}'`);
+//    await execBash(`ccache --set-config=cache_dir='${path.join(paths)}'`);
     await execBash(`ccache --set-config=cache_dir='${path.join(ccacheDir)}'`);
     await execBash(`ccache --set-config=max_size='${maxSize}'`);
     await execBash(`ccache --set-config=compression_level='${compression_level}'`);
@@ -444,6 +466,8 @@ function checkSha256Sum (path : string, expectedSha256 : string) {
 
 async function runInner() : Promise<void> {
   const ccacheVariant = core.getInput("variant");
+  const ccacheDir = core.getInput('ccache-dir');
+  core.saveState("ccacheDir", ccacheDir);
   core.saveState("ccacheVariant", ccacheVariant);
   core.saveState("shouldSave", core.getBooleanInput("save"));
   core.saveState("appendTimestamp", core.getBooleanInput("append-timestamp"));
